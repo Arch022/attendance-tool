@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Attendance Variance Tool V3</title>
+<style>
+  :root { --bg:#f5f7fa; --card:#fff; --text:#17212b; --muted:#697586; --line:#dfe5ec; --accent:#1f6feb; --ok:#14804a; --bad:#c62828; }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Inter,"Segoe UI","Microsoft YaHei",Arial,sans-serif;color:var(--text)}
+  .wrap{max-width:760px;margin:48px auto;padding:0 18px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;box-shadow:0 8px 28px rgba(0,0,0,.05)}
+  h1{font-size:24px;margin:0 0 6px}.sub{color:var(--muted);font-size:13px;margin-bottom:24px}.step{border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+  .label{font-weight:700;margin-bottom:8px}.hint{font-size:12px;color:var(--muted);margin-top:6px}.fileline{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  input[type=file]{max-width:100%}.recognized{font-size:12px;color:var(--ok);font-weight:600}.error{font-size:12px;color:var(--bad);font-weight:600;white-space:pre-line}
+  details{margin:14px 0;color:var(--muted);font-size:13px} details .settings{padding:12px 0 2px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+  select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:white}.btn{width:100%;padding:14px 18px;border:0;border-radius:10px;background:var(--accent);color:white;font-size:16px;font-weight:700;cursor:pointer}.btn:disabled{opacity:.45;cursor:not-allowed}
+  .result{display:none;margin-top:18px;padding:16px;border-radius:12px;background:#f7fbff;border:1px solid #cfe3ff}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0}.stat{background:white;border:1px solid var(--line);border-radius:10px;padding:12px}.stat b{display:block;font-size:22px}.bad b{color:var(--bad)}
+  .download{margin-top:12px;background:#0f7b45}.foot{font-size:12px;color:var(--muted);margin-top:16px;line-height:1.5}.loader{display:none;text-align:center;color:var(--muted);margin-top:12px}
+  @media(max-width:600px){.wrap{margin:18px auto}.card{padding:18px}.stats{grid-template-columns:1fr}}
+</style>
+<script>
+  window._xlsxStyleLoadFailed = false;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js" onerror="window._xlsxStyleLoadFailed=true"></script>
+<script>
+  if (typeof XLSX === 'undefined') {
+    document.write('<script src="https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"><\/script>');
+  }
+</script>
+<script>
+  if (typeof XLSX === 'undefined') {
+    document.write('<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"><\/script>');
+  }
+</script>
+</head>
+<body>
+<div class="wrap"><div class="card">
+  <h1>考勤上班缺卡核对工具 V3<br><span style="font-size:18px;font-weight:600">เครื่องมือตรวจสอบการลงเวลาเข้างาน V3</span></h1>
+  <div class="sub">上传任务人员报告 + 打卡报告，自动筛选班次上班时间缺卡人员。文件仅在浏览器本地处理。<br>อัปโหลดรายงานรายชื่อพนักงานตามกะ + รายงานการลงเวลา ระบบจะตรวจหาพนักงานที่ไม่มีการลงเวลาเข้างานตามช่วงเวลาของกะโดยอัตโนมัติ ไฟล์ทั้งหมดประมวลผลภายในเบราว์เซอร์เท่านั้น</div>
+
+  <div class="step">
+    <div class="label">1. 任务人员报告 / รายงานรายชื่อพนักงานตามกะ</div>
+    <div class="fileline"><input id="taskFile" type="file" accept=".xlsx,.xls"/><span id="taskState"></span></div>
+    <div class="hint">识别字段：员工工号 / รหัสประจำตัวพนักงาน、任务日期 / วันที่ปฏิบัติงาน、用工时段 / ช่วงเวลาการทำงาน</div>
+  </div>
+
+  <div class="step">
+    <div class="label">2. 打卡报告 / รายงานการลงเวลา</div>
+    <div class="fileline"><input id="punchFile" type="file" accept=".xlsx,.xls"/><span id="punchState"></span></div>
+    <div class="hint">识别字段：员工工号 / รหัสประจำตัวพนักงาน、打卡时间 / เวลาที่บันทึก、打卡类型 / ประเภทการบันทึก</div>
+  </div>
+
+  <details>
+    <summary>设置（一般无需修改） / การตั้งค่า (โดยทั่วไปไม่ต้องแก้ไข)</summary>
+    <div class="settings">
+      <label>允许提前打卡 / อนุญาตให้ลงเวลาก่อนเริ่มกะ：
+        <select id="earlyHours">
+          <option value="1">1小时 / 1 ชั่วโมง</option>
+          <option value="2">2小时 / 2 ชั่วโมง</option>
+          <option value="3">3小时 / 3 ชั่วโมง</option>
+          <option value="5" selected>5小时 / 5 ชั่วโมง</option>
+        </select>
+      </label>
+      <span>班次开始后固定 +30 分钟 / หลังเริ่มกะ +30 นาที</span>
+    </div>
+    <div class="hint">00:00–11:59 开始的班次按“任务日期次日”作为实际班次日期；12:00 及以后按任务日期当天。<br>สำหรับกะที่เริ่มเวลา 00:00–11:59 ระบบจะใช้วันถัดจากวันที่ปฏิบัติงานเป็นวันที่เริ่มกะจริง ส่วนกะที่เริ่มตั้งแต่ 12:00 เป็นต้นไปจะใช้วันที่ปฏิบัติงานวันเดียวกัน</div>
+  </details>
+
+  <button id="runBtn" class="btn" disabled>生成核对报告 / สร้างรายงานตรวจสอบ</button>
+  <div id="loader" class="loader">正在核对，请稍候… / กำลังตรวจสอบ โปรดรอสักครู่…</div>
+  <div id="globalError" class="error" style="margin-top:12px"></div>
+
+  <div id="result" class="result">
+    <b>核对完成 / ตรวจสอบเสร็จแล้ว</b>
+    <div class="stats">
+      <div class="stat"><span>任务人数 / จำนวนพนักงานตามกะ</span><b id="totalN">0</b></div>
+      <div class="stat"><span>已打卡 / พบการลงเวลา</span><b id="okN">0</b></div>
+      <div class="stat bad"><span>FLAG 缺卡 / ไม่พบการลงเวลา</span><b id="flagN">0</b></div>
+    </div>
+    <button id="downloadBtn" class="btn download">下载 3-Sheet Excel / ดาวน์โหลดไฟล์ Excel 3 Sheet</button>
+  </div>
+
+  <div class="foot">V3 · 输出：① Variance Report（任务人员原数据 + 3 个核对字段 + 供应商/劳工反馈考勤打卡成功照片空白列） ② Source - Task Report ③ Source - Punch Report。Source Sheet 不做任何业务数据修改。<br>ผลลัพธ์: ① Variance Report (ข้อมูลต้นฉบับจากรายงานรายชื่อพนักงาน + 3 ช่องตรวจสอบ + ช่องว่างสำหรับรูปภาพยืนยันการลงเวลาเข้างานสำเร็จจากผู้ให้บริการแรงงาน/พนักงาน) ② Source - Task Report ③ Source - Punch Report โดย Source Sheet จะไม่ถูกแก้ไขข้อมูล</div>
+</div></div>
+
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const taskInput=$('taskFile'), punchInput=$('punchFile'), runBtn=$('runBtn');
+  let taskCtx=null, punchCtx=null, outputWb=null;
+
+  const norm = v => String(v ?? '').normalize('NFC').trim().replace(/\s+/g,' ').toLowerCase();
+  const normId = v => String(v ?? '').normalize('NFC').trim().toUpperCase();
+
+  const aliases = {
+    emp: ['员工工号','รหัสประจําตัวพนักงาน','รหัสประจำตัวพนักงาน','employee id','employee no','employee number','emp id','staff id'],
+    taskDate: ['任务日期','task date','work date','วันที่งาน','วันที่ทำงาน','วันที่ปฏิบัติงาน'],
+    shift: ['用工时段','任务班次','shift','shift time','work shift','กะ','ช่วงเวลาทำงาน','ช่วงเวลาการทำงาน'],
+    punchTime: ['打卡时间','punch time','clock time','clock-in time','เวลาเข้างาน','เวลาลงเวลา','เวลาที่บันทึก'],
+    punchType: ['打卡类型','punch type','clock type','ประเภทการลงเวลา','ประเภทการบันทึก'],
+    modifiedBy: ['修改人','updated by','modified by','ผู้แก้ไข']
+  };
+
+  const aliasSet = key => new Set(aliases[key].map(norm));
+
+  const isClockIn = v => {
+    const x = norm(v);
+    return ['上班','clock in','clock-in','in','เข้า','เข้างาน','ลงเวลาเข้า'].some(a => x === norm(a));
+  };
+
+  function findHeaderIndex(row, key){
+    const set=aliasSet(key);
+    for(let i=0;i<row.length;i++){
+      if(set.has(norm(row[i]))) return i;
+    }
+    return -1;
+  }
+
+  function findSheetAndHeader(wb, requiredKeys){
+    for(const name of wb.SheetNames){
+      const ws=wb.Sheets[name];
+      const aoa=XLSX.utils.sheet_to_json(ws,{
+        header:1,
+        defval:'',
+        raw:false,
+        blankrows:false
+      });
+
+      for(let r=0;r<Math.min(20,aoa.length);r++){
+        const row=aoa[r];
+        if(requiredKeys.every(k=>findHeaderIndex(row,k)>=0)){
+          return {name,ws,aoa,headerRow:r,headers:row};
+        }
+      }
+    }
+    return null;
+  }
+
+  async function loadFile(file, kind){
+    if(typeof XLSX==='undefined'){
+      throw new Error('Excel 组件未加载，请确认网络后刷新页面。 / ไม่สามารถโหลดส่วนประกอบ Excel ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า');
+    }
+
+    const buf=await file.arrayBuffer();
+    let wb;
+
+    try{
+      wb=XLSX.read(buf,{
+        type:'array',
+        raw:false,
+        cellStyles:true,
+        nodim:true
+      });
+    }catch(e){
+      wb=XLSX.read(buf,{
+        type:'array',
+        raw:false,
+        cellStyles:true
+      });
+    }
+
+    const req = kind==='task'
+      ? ['emp','taskDate','shift']
+      : ['emp','punchTime'];
+
+    const found=findSheetAndHeader(wb,req);
+
+    if(!found){
+      throw new Error(
+        kind==='task'
+        ? '未找到必要字段：员工工号 + 任务日期 + 用工时段 / ไม่พบฟิลด์ที่จำเป็น: รหัสประจำตัวพนักงาน + วันที่ปฏิบัติงาน + ช่วงเวลาการทำงาน'
+        : '未找到必要字段：员工工号 + 打卡时间 / ไม่พบฟิลด์ที่จำเป็น: รหัสประจำตัวพนักงาน + เวลาที่บันทึก'
+      );
+    }
+
+    return {file,wb,...found};
+  }
+
+  function setState(el,msg,ok){
+    el.textContent=msg;
+    el.className=ok?'recognized':'error';
+  }
+
+  function refreshRun(){
+    runBtn.disabled=!(taskCtx&&punchCtx);
+  }
+
+  taskInput.addEventListener('change',async()=>{
+    taskCtx=null;
+    $('result').style.display='none';
+
+    if(!taskInput.files[0]) return refreshRun();
+
+    try{
+      taskCtx=await loadFile(taskInput.files[0],'task');
+      setState($('taskState'),'✓ 已识别 / ระบุไฟล์แล้ว',true);
+    }catch(e){
+      setState($('taskState'),'✕ '+e.message,false);
+    }
+
+    refreshRun();
+  });
+
+  punchInput.addEventListener('change',async()=>{
+    punchCtx=null;
+    $('result').style.display='none';
+
+    if(!punchInput.files[0]) return refreshRun();
+
+    try{
+      punchCtx=await loadFile(punchInput.files[0],'punch');
+      setState($('punchState'),'✓ 已识别 / ระบุไฟล์แล้ว',true);
+    }catch(e){
+      setState($('punchState'),'✕ '+e.message,false);
+    }
+
+    refreshRun();
+  });
+
+  function parseDate(s){
+    const x=String(s??'').trim();
+
+    let m=x.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})/);
+    if(m) return new Date(+m[1],+m[2]-1,+m[3]);
+
+    m=x.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})/);
+    if(m) return new Date(+m[3],+m[2]-1,+m[1]);
+
+    const d=new Date(x);
+    return isNaN(d)?null:d;
+  }
+
+  function parseDateTime(s){
+    const x=String(s??'').trim();
+
+    let m=x.match(/^(\d{4})[-\/.](\d{1,2})[-\/.](\d{1,2})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+
+    if(m){
+      return new Date(
+        +m[1],
+        +m[2]-1,
+        +m[3],
+        +m[4],
+        +m[5],
+        +(m[6]||0)
+      );
+    }
+
+    m=x.match(/^(\d{1,2})[-\/.](\d{1,2})[-\/.](\d{4})\s+(\d{1,2}):(\d{2})(?::(\d{2}))?/);
+
+    if(m){
+      return new Date(
+        +m[3],
+        +m[2]-1,
+        +m[1],
+        +m[4],
+        +m[5],
+        +(m[6]||0)
+      );
+    }
+
+    const d=new Date(x);
+    return isNaN(d)?null:d;
+  }
+
+  function shiftStartParts(s){
+    const m=String(s??'').match(/(\d{1,2})\s*:\s*(\d{2})/);
+    return m?{h:+m[1],m:+m[2]}:null;
+  }
+
+  function fmtDT(d){
+    const p=n=>String(n).padStart(2,'0');
+
+    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}:${p(d.getSeconds())}`;
+  }
+
+  function makeStart(base,part,addDay){
+    return new Date(
+      base.getFullYear(),
+      base.getMonth(),
+      base.getDate()+addDay,
+      part.h,
+      part.m,
+      0,
+      0
+    );
+  }
+
+  function bestPunch(punchList,start,earlyHours){
+    const lo=start.getTime()-earlyHours*3600000;
+    const hi=start.getTime()+30*60000;
+
+    const arr=punchList.filter(
+      p=>p.dt.getTime()>=lo && p.dt.getTime()<=hi
+    );
+
+    if(!arr.length) return null;
+
+    return arr.reduce(
+      (a,b)=>Math.abs(a.dt-start)<Math.abs(b.dt-start)?a:b
+    );
+  }
+
+  function cloneWs(ws){
+    try{
+      return structuredClone(ws);
+    }catch(e){
+      return JSON.parse(JSON.stringify(ws));
+    }
+  }
+
+  function styleVariance(ws, headerRow1, statusCol1, rowsCount, colsCount){
+    ws['!freeze']={
+      xSplit:0,
+      ySplit:headerRow1,
+      topLeftCell:'A'+(headerRow1+1),
+      activePane:'bottomLeft',
+      state:'frozen'
+    };
+
+    ws['!autofilter']={
+      ref:`A${headerRow1}:${XLSX.utils.encode_col(colsCount-1)}${rowsCount}`
+    };
+
+    const status0=statusCol1-1;
+    const feedback0=status0+3;
+
+    ws['!cols']=Array.from({length:colsCount},(_,i)=>{
+      if(i===status0) return {wch:30};
+      if(i===status0+1) return {wch:24};
+      if(i===status0+2) return {wch:24};
+      if(i===feedback0) return {wch:42};
+      return {wch:14};
+    });
+
+    const blueBody='DDEBF7';
+    const blueHead='9DC3E6';
+    const yellowBody='FFF2CC';
+    const yellowHead='FFD966';
+
+    const border={
+      top:{style:'thin',color:{rgb:'D9D9D9'}},
+      bottom:{style:'thin',color:{rgb:'D9D9D9'}},
+      left:{style:'thin',color:{rgb:'D9D9D9'}},
+      right:{style:'thin',color:{rgb:'D9D9D9'}}
+    };
+
+    const apply=(r,c,fill,isHeader=false)=>{
+      const addr=XLSX.utils.encode_cell({r,c});
+
+      if(!ws[addr]){
+        ws[addr]={t:'s',v:''};
+      }
+
+      const existing=ws[addr].s||{};
+
+      ws[addr].s={
+        ...existing,
+        fill:{
+          patternType:'solid',
+          fgColor:{rgb:fill}
+        },
+        border,
+        alignment:{
+          ...(existing.alignment||{}),
+          vertical:'center',
+          wrapText:true
+        },
+        font:{
+          ...(existing.font||{}),
+          bold:isHeader || !!(existing.font&&existing.font.bold)
+        }
+      };
+    };
+
+    for(let r=0;r<rowsCount;r++){
+      const isHeader=r===headerRow1-1;
+
+      for(let c=status0;c<=status0+2;c++){
+        apply(r,c,isHeader?blueHead:blueBody,isHeader);
+      }
+
+      apply(
+        r,
+        feedback0,
+        isHeader?yellowHead:yellowBody,
+        isHeader
+      );
+
+      if(!isHeader){
+        const addr=XLSX.utils.encode_cell({
+          r,
+          c:status0
+        });
+
+        const txt=String(ws[addr]?.v??'');
+
+        if(txt.startsWith('FLAG')){
+          ws[addr].s={
+            ...(ws[addr].s||{}),
+            font:{
+              ...((ws[addr].s||{}).font||{}),
+              bold:true,
+              color:{rgb:'C00000'}
+            }
+          };
+        }else if(txt.startsWith('OK')){
+          ws[addr].s={
+            ...(ws[addr].s||{}),
+            font:{
+              ...((ws[addr].s||{}).font||{}),
+              bold:true,
+              color:{rgb:'006100'}
+            }
+          };
+        }
+      }
+    }
+  }
+
+  runBtn.addEventListener('click',()=>{
+    $('globalError').textContent='';
+    $('result').style.display='none';
+    $('loader').style.display='block';
+    runBtn.disabled=true;
+
+    setTimeout(()=>{
+      try{
+        const earlyHours=+$('earlyHours').value;
+
+        const tRows=taskCtx.aoa.slice(taskCtx.headerRow);
+        const pRows=punchCtx.aoa.slice(punchCtx.headerRow);
+
+        const tHdr=tRows[0].slice();
+        const pHdr=pRows[0].slice();
+
+        const ti={
+          emp:findHeaderIndex(tHdr,'emp'),
+          date:findHeaderIndex(tHdr,'taskDate'),
+          shift:findHeaderIndex(tHdr,'shift'),
+          mod:findHeaderIndex(tHdr,'modifiedBy')
+        };
+
+        const pi={
+          emp:findHeaderIndex(pHdr,'emp'),
+          time:findHeaderIndex(pHdr,'punchTime'),
+          type:findHeaderIndex(pHdr,'punchType')
+        };
+
+        if(
+          ti.emp<0 ||
+          ti.date<0 ||
+          ti.shift<0 ||
+          pi.emp<0 ||
+          pi.time<0
+        ){
+          throw new Error(
+            '关键字段识别失败，请检查两个报告格式。 / ไม่สามารถระบุฟิลด์สำคัญได้ กรุณาตรวจสอบรูปแบบของรายงานทั้งสองไฟล์'
+          );
+        }
+
+        const punchMap=new Map();
+
+        for(let r=1;r<pRows.length;r++){
+          const row=pRows[r];
+
+          const id=normId(row[pi.emp]);
+
+          if(!id) continue;
+
+          if(
+            pi.type>=0 &&
+            row[pi.type]!=='' &&
+            !isClockIn(row[pi.type])
+          ){
+            continue;
+          }
+
+          const dt=parseDateTime(row[pi.time]);
+
+          if(!dt) continue;
+
+          if(!punchMap.has(id)){
+            punchMap.set(id,[]);
+          }
+
+          punchMap.get(id).push({
+            dt,
+            rowIndex:r
+          });
+        }
+
+        for(const arr of punchMap.values()){
+          arr.sort((a,b)=>a.dt-b.dt);
+        }
+
+        const insertAt =
+          ti.mod>=0
+          ? ti.mod+1
+          : tHdr.length;
+
+        const extraHeaders=[
+          '上班打卡核对 / ตรวจสอบการลงเวลาเข้า',
+          '匹配打卡时间 / เวลาลงเวลาที่จับคู่',
+          '与班次开始差异(分钟) / ต่างจากเวลาเริ่มกะ(นาที)',
+          '供应商/劳工反馈考勤打卡成功照片 / รูปภาพยืนยันการลงเวลาเข้างานสำเร็จจากผู้ให้บริการแรงงาน/พนักงาน'
+        ];
+
+        const outHdr=
+          tHdr.slice(0,insertAt)
+          .concat(
+            extraHeaders,
+            tHdr.slice(insertAt)
+          );
+
+        const out=[outHdr];
+
+        let ok=0;
+        let flag=0;
+        let validTasks=0;
+
+        for(let r=1;r<tRows.length;r++){
+          const row=tRows[r].slice();
+
+          if(
+            row.every(
+              v=>String(v??'').trim()===''
+            )
+          ){
+            continue;
+          }
+
+          validTasks++;
+
+          const id=normId(row[ti.emp]);
+          const base=parseDate(row[ti.date]);
+          const part=shiftStartParts(row[ti.shift]);
+
+          let status=
+            'FLAG - 缺卡 / ไม่พบการลงเวลาเข้า';
+
+          let matched='';
+          let diff='';
+
+          if(id && base && part){
+            const list=punchMap.get(id)||[];
+
+            const startDayOffset =
+              part.h < 12 ? 1 : 0;
+
+            const start=
+              makeStart(
+                base,
+                part,
+                startDayOffset
+              );
+
+            const hit=
+              bestPunch(
+                list,
+                start,
+                earlyHours
+              );
+
+            if(hit){
+              status=
+                'OK - 已打卡 / พบการลงเวลาเข้า';
+
+              matched=
+                fmtDT(hit.dt);
+
+              diff=
+                Math.round(
+                  (hit.dt-start)/60000
+                );
+
+              ok++;
+            }else{
+              flag++;
+            }
+
+          }else{
+            status=
+              'FLAG - 数据异常 / ข้อมูลผิดปกติ';
+
+            flag++;
+          }
+
+          const extras=[
+            status,
+            matched,
+            diff,
+            ''
+          ];
+
+          out.push(
+            row.slice(0,insertAt)
+            .concat(
+              extras,
+              row.slice(insertAt)
+            )
+          );
+        }
+
+        const hdr=out[0];
+        const body=out.slice(1);
+        const statusIdx=insertAt;
+
+        body.sort((a,b)=>{
+          const af=
+            String(a[statusIdx])
+            .startsWith('FLAG');
+
+          const bf=
+            String(b[statusIdx])
+            .startsWith('FLAG');
+
+          if(af===bf) return 0;
+
+          return af ? -1 : 1;
+        });
+
+        const sortedWs=
+          XLSX.utils.aoa_to_sheet([
+            hdr,
+            ...body
+          ]);
+
+        styleVariance(
+          sortedWs,
+          1,
+          insertAt+1,
+          body.length+1,
+          outHdr.length
+        );
+
+        outputWb=
+          XLSX.utils.book_new();
+
+        XLSX.utils.book_append_sheet(
+          outputWb,
+          sortedWs,
+          'Variance Report'
+        );
+
+        XLSX.utils.book_append_sheet(
+          outputWb,
+          cloneWs(taskCtx.ws),
+          'Source - Task Report'
+        );
+
+        XLSX.utils.book_append_sheet(
+          outputWb,
+          cloneWs(punchCtx.ws),
+          'Source - Punch Report'
+        );
+
+        $('totalN').textContent=
+          validTasks;
+
+        $('okN').textContent=
+          ok;
+
+        $('flagN').textContent=
+          flag;
+
+        $('result').style.display=
+          'block';
+
+      }catch(e){
+        console.error(e);
+        $('globalError').textContent=
+          e.message || String(e);
+
+      }finally{
+        $('loader').style.display=
+          'none';
+
+        runBtn.disabled=false;
+      }
+    },30);
+  });
+
+  $('downloadBtn').addEventListener('click',()=>{
+    if(!outputWb) return;
+
+    const d=new Date();
+
+    const p=n=>
+      String(n).padStart(2,'0');
+
+    const name=
+      `Attendance_Variance_${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}_${p(d.getHours())}${p(d.getMinutes())}.xlsx`;
+
+    XLSX.writeFile(
+      outputWb,
+      name,
+      {compression:true}
+    );
+  });
+})();
+</script>
+</body>
+</html>
