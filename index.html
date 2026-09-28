@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="th">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -77,8 +77,29 @@
     flex-wrap:wrap
   }
 
-  input[type=file]{
-    max-width:100%
+  .file-input-hidden{
+    display:none
+  }
+
+  .file-picker{
+    display:inline-flex;
+    align-items:center;
+    padding:6px 10px;
+    border:1px solid #cfd6df;
+    border-radius:7px;
+    background:#fff;
+    color:#223041;
+    font-size:13px;
+    cursor:pointer
+  }
+
+  .file-picker:hover{
+    background:#f6f8fb
+  }
+
+  .file-name{
+    font-size:12px;
+    color:var(--muted)
   }
 
   .recognized{
@@ -176,11 +197,25 @@
     margin-top:12px
   }
 
-  .scope-note{
-    margin-top:8px;
+  .scope-highlight{
+    margin-top:12px;
+    padding:11px 13px;
+    border:1px solid #c9daf2;
+    border-radius:10px;
+    background:#f4f8ff
+  }
+
+  .scope-main{
+    font-size:14px;
+    font-weight:700;
+    color:#245b96;
+    margin-bottom:5px
+  }
+
+  .scope-sub{
     font-size:12px;
     line-height:1.55;
-    color:var(--muted);
+    color:var(--muted)
   }
 
   .feedback-shell{
@@ -197,18 +232,18 @@
   .feedback-title{
     font-weight:700;
     font-size:16px;
-    margin-bottom:5px;
+    margin-bottom:5px
   }
 
   .feedback-help{
     font-size:10px;
     line-height:1.4;
     color:var(--muted);
-    margin-bottom:9px;
+    margin-bottom:9px
   }
 
   .helpful-row{
-    margin:6px 0 9px;
+    margin:6px 0 9px
   }
 
   .helpful-btn{
@@ -221,31 +256,31 @@
     border-radius:9px;
     padding:6px 8px;
     cursor:pointer;
-    font-weight:600;
+    font-weight:600
   }
 
   .helpful-btn:hover{
     background:#e3efff;
-    border-color:#aac6e9;
+    border-color:#aac6e9
   }
 
   .helpful-btn.active{
     border-color:#7fa9d8;
     background:#d7e9ff;
-    color:#174f87;
+    color:#174f87
   }
 
   .helpful-status{
     min-height:16px;
     margin-top:5px;
     font-size:10px;
-    color:var(--ok);
+    color:var(--ok)
   }
 
   .optional-wrap{
     margin-top:10px;
     padding-top:8px;
-    border-top:1px solid #edf0f3;
+    border-top:1px solid #edf0f3
   }
 
   .optional-label{
@@ -254,7 +289,7 @@
     font-weight:600;
     margin-bottom:5px;
     color:#8a94a3;
-    line-height:1.45;
+    line-height:1.45
   }
 
   .feedback-shell textarea{
@@ -267,11 +302,11 @@
     font:inherit;
     font-size:13px;
     background:#fff;
-    color:#5f6875;
+    color:#5f6875
   }
 
   .feedback-shell textarea::placeholder{
-    color:#b0b7c0;
+    color:#b0b7c0
   }
 
   .feedback-submit{
@@ -285,19 +320,19 @@
     color:#687281;
     font-size:11px;
     font-weight:600;
-    cursor:pointer;
+    cursor:pointer
   }
 
   .feedback-submit:hover{
     background:#f0f3f6;
-    border-color:#cfd6de;
+    border-color:#cfd6de
   }
 
   .feedback-status{
     min-height:18px;
     margin-top:7px;
     font-size:10px;
-    color:var(--ok);
+    color:var(--ok)
   }
 
   @media(max-width:900px){
@@ -335,7 +370,7 @@ window._xlsxStyleLoadFailed = false;
 </script>
 
 <script>
-if (typeof XLSX === 'undefined') {
+if(typeof XLSX === 'undefined'){
   document.write(
     '<script src="https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"><\/script>'
   );
@@ -343,7 +378,7 @@ if (typeof XLSX === 'undefined') {
 </script>
 
 <script>
-if (typeof XLSX === 'undefined') {
+if(typeof XLSX === 'undefined'){
   document.write(
     '<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"><\/script>'
   );
@@ -355,45 +390,68 @@ if (typeof XLSX === 'undefined') {
 <body>
 
 <div class="wrap">
-
   <div class="layout">
 
     <div class="card">
 
       <h1>
-        J&T泰国劳务工上班缺卡核对工具 V5
+        เครื่องมือตรวจสอบการขาดการลงเวลาเข้างานของแรงงานจ้างเหมา J&T ประเทศไทย V5
         <br>
         <span style="font-size:18px;font-weight:600">
-          เครื่องมือตรวจสอบการขาดการลงเวลาเข้างานของแรงงานจ้างเหมา J&T ประเทศไทย V5
+          J&T泰国劳务工上班缺卡核对工具 V5
         </span>
       </h1>
 
-      <div class="scope-note">
-        仅用于班次开始后的“上班缺卡”快速核对；班次结束后请直接从 JMS 导出完整考勤报告进行最终核对，无需再使用本工具。
-        <br>
-        ใช้สำหรับตรวจสอบ “ขาดการลงเวลาเข้างาน” หลังเริ่มกะเท่านั้น เมื่อสิ้นสุดกะแล้ว กรุณาส่งออกรายงานเวลาทำงานฉบับเต็มจาก JMS เพื่อตรวจสอบขั้นสุดท้าย โดยไม่จำเป็นต้องใช้เครื่องมือนี้
+      <div class="scope-highlight">
+
+        <div class="scope-main">
+          ✅ ใช้สำหรับตรวจสอบการลงเวลาเข้างานเท่านั้น / 仅适用上班卡核对
+        </div>
+
+        <div class="scope-sub">
+          ใช้สำหรับตรวจสอบ “ขาดการลงเวลาเข้างาน” หลังเริ่มกะเท่านั้น เมื่อสิ้นสุดกะแล้ว กรุณาส่งออกรายงานเวลาทำงานฉบับเต็มจาก JMS เพื่อตรวจสอบขั้นสุดท้าย โดยไม่จำเป็นต้องใช้เครื่องมือนี้
+          <br>
+          仅用于班次开始后的“上班缺卡”快速核对；班次结束后请直接从 JMS 导出完整考勤报告进行最终核对，无需再使用本工具。
+        </div>
+
       </div>
 
       <div class="step">
 
         <div class="label">
-          1. 任务人员报告 / รายงานรายชื่อพนักงานตามกะ
+          1. รายงานรายชื่อพนักงานตามกะ / 任务人员报告
         </div>
 
         <div class="fileline">
+
+          <label
+            class="file-picker"
+            for="taskFile">
+            เลือกไฟล์ / 选择文件
+          </label>
+
           <input
             id="taskFile"
+            class="file-input-hidden"
             type="file"
             accept=".xlsx,.xls"
           />
+
+          <span
+            id="taskFileName"
+            class="file-name">
+            ยังไม่ได้เลือกไฟล์ / 未选择文件
+          </span>
+
           <span id="taskState"></span>
+
         </div>
 
         <div class="hint">
-          识别字段 / ฟิลด์ที่ระบบรองรับ：
-          员工工号/工号 / รหัสประจำตัวพนักงาน、
-          任务日期 / วันที่ปฏิบัติงาน、
-          用工时段/班次 / ช่วงเวลาการทำงาน/กะ
+          ฟิลด์ที่ระบบรองรับ / 识别字段：
+          รหัสประจำตัวพนักงาน / 员工工号/工号、
+          วันที่ปฏิบัติงาน / 任务日期、
+          ช่วงเวลาการทำงาน/กะ / 用工时段/班次
         </div>
 
       </div>
@@ -402,22 +460,38 @@ if (typeof XLSX === 'undefined') {
       <div class="step">
 
         <div class="label">
-          2. 打卡报告 / รายงานการลงเวลา
+          2. รายงานการลงเวลา / 打卡报告
         </div>
 
         <div class="fileline">
+
+          <label
+            class="file-picker"
+            for="punchFile">
+            เลือกไฟล์ / 选择文件
+          </label>
+
           <input
             id="punchFile"
+            class="file-input-hidden"
             type="file"
             accept=".xlsx,.xls"
           />
+
+          <span
+            id="punchFileName"
+            class="file-name">
+            ยังไม่ได้เลือกไฟล์ / 未选择文件
+          </span>
+
           <span id="punchState"></span>
+
         </div>
 
         <div class="hint">
-          识别字段 / ฟิลด์ที่ระบบรองรับ：
-          员工工号/工号 / รหัสประจำตัวพนักงาน、
-          打卡时间 / เวลาที่บันทึก
+          ฟิลด์ที่ระบบรองรับ / 识别字段：
+          รหัสประจำตัวพนักงาน / 员工工号/工号、
+          เวลาที่บันทึก / 打卡时间
         </div>
 
       </div>
@@ -426,37 +500,35 @@ if (typeof XLSX === 'undefined') {
       <details>
 
         <summary>
-          打卡有效时间范围设置（一般无需修改）
+          ตั้งค่า: ช่วงเวลาการลงเวลาที่มีผล (โดยทั่วไปไม่ต้องแก้ไข)
           /
-          การตั้งค่าช่วงเวลาการลงเวลาที่มีผล (โดยทั่วไปไม่ต้องแก้ไข)
+          设置：打卡有效时间范围（一般无需修改）
         </summary>
 
         <div class="settings">
 
           <label>
-            允许提前打卡 /
-            อนุญาตให้ลงเวลาก่อนเริ่มกะ：
+            อนุญาตให้ลงเวลาก่อนเริ่มกะ / 允许提前打卡：
 
             <select id="earlyHours">
-              <option value="1">1小时 / 1 ชั่วโมง</option>
-              <option value="2" selected>2小时 / 2 ชั่วโมง</option>
-              <option value="3">3小时 / 3 ชั่วโมง</option>
-              <option value="5">5小时 / 5 ชั่วโมง</option>
+              <option value="1">1 ชั่วโมง / 1小时</option>
+              <option value="2" selected>2 ชั่วโมง / 2小时</option>
+              <option value="3">3 ชั่วโมง / 3小时</option>
+              <option value="5">5 ชั่วโมง / 5小时</option>
             </select>
 
           </label>
 
 
           <label>
-            允许班次开始后打卡 /
-            อนุญาตให้ลงเวลาหลังเริ่มกะ：
+            อนุญาตให้ลงเวลาหลังเริ่มกะ / 允许班次开始后打卡：
 
             <select id="lateHours">
-              <option value="0.5">0.5小时 / 30 นาที</option>
-              <option value="1" selected>1小时 / 1 ชั่วโมง</option>
-              <option value="2">2小时 / 2 ชั่วโมง</option>
-              <option value="3">3小时 / 3 ชั่วโมง</option>
-              <option value="5">5小时 / 5 ชั่วโมง</option>
+              <option value="0.5">30 นาที / 0.5小时</option>
+              <option value="1" selected>1 ชั่วโมง / 1小时</option>
+              <option value="2">2 ชั่วโมง / 2小时</option>
+              <option value="3">3 ชั่วโมง / 3小时</option>
+              <option value="5">5 ชั่วโมง / 5小时</option>
             </select>
 
           </label>
@@ -470,14 +542,14 @@ if (typeof XLSX === 'undefined') {
         id="runBtn"
         class="btn"
         disabled>
-        生成核对报告 / สร้างรายงานตรวจสอบ
+        สร้างรายงานตรวจสอบ / 生成核对报告
       </button>
 
 
       <div
         id="loader"
         class="loader">
-        正在核对，请稍候… / กำลังตรวจสอบ โปรดรอสักครู่…
+        กำลังตรวจสอบ โปรดรอสักครู่… / 正在核对，请稍候…
       </div>
 
 
@@ -493,39 +565,38 @@ if (typeof XLSX === 'undefined') {
         class="result">
 
         <b>
-          核对完成 / ตรวจสอบเสร็จแล้ว
+          ตรวจสอบเสร็จแล้ว / 核对完成
         </b>
 
         <div class="stats">
 
           <div class="stat">
             <span>
-              任务人数 / จำนวนพนักงานตามกะ
+              จำนวนพนักงานตามกะ / 任务人数
             </span>
             <b id="totalN">0</b>
           </div>
 
           <div class="stat">
             <span>
-              已打卡 / พบการลงเวลา
+              พบการลงเวลา / 已打卡
             </span>
             <b id="okN">0</b>
           </div>
 
           <div class="stat bad">
             <span>
-              FLAG 缺卡 / ไม่พบการลงเวลา
+              FLAG ไม่พบการลงเวลา / 缺卡
             </span>
             <b id="flagN">0</b>
           </div>
 
         </div>
 
-
         <button
           id="downloadBtn"
           class="btn download">
-          下载 3-Sheet Excel / ดาวน์โหลดไฟล์ Excel 3 Sheet
+          ดาวน์โหลดไฟล์ Excel 3 Sheet / 下载 3-Sheet Excel
         </button>
 
       </div>
@@ -536,19 +607,19 @@ if (typeof XLSX === 'undefined') {
     <aside class="feedback-shell">
 
       <div class="feedback-title">
-        反馈 / ข้อเสนอแนะ
+        ข้อเสนอแนะ / 反馈
       </div>
 
       <div class="feedback-help">
-        您的反馈将帮助我们持续改善。
-        <br>
         ความคิดเห็นของคุณช่วยให้เราปรับปรุงได้อย่างต่อเนื่อง
+        <br>
+        您的反馈将帮助我们持续改善。
       </div>
 
       <div style="font-size:11px;font-weight:600;line-height:1.35">
-        这个工具有帮助吗？
-        <br>
         เครื่องมือนี้มีประโยชน์หรือไม่?
+        <br>
+        这个工具有帮助吗？
       </div>
 
       <div class="helpful-row">
@@ -557,7 +628,7 @@ if (typeof XLSX === 'undefined') {
           id="helpfulBtn"
           type="button"
           class="helpful-btn">
-          👍 有帮助 / มีประโยชน์
+          👍 มีประโยชน์ / 有帮助
         </button>
 
       </div>
@@ -573,23 +644,21 @@ if (typeof XLSX === 'undefined') {
         <label
           for="feedbackText"
           class="optional-label">
-
-          其他建议（可选）
-          <br>
           ข้อเสนอแนะเพิ่มเติม (ไม่บังคับ)
-
+          <br>
+          其他建议（可选）
         </label>
 
         <textarea
           id="feedbackText"
-          placeholder="请输入 / กรุณากรอก">
+          placeholder="กรุณากรอก / 请输入">
         </textarea>
 
         <button
           id="feedbackSubmit"
           type="button"
           class="feedback-submit">
-          提交建议 / ส่งข้อเสนอแนะ
+          ส่งข้อเสนอแนะ / 提交建议
         </button>
 
         <div
@@ -602,7 +671,6 @@ if (typeof XLSX === 'undefined') {
     </aside>
 
   </div>
-
 </div>
 
 
@@ -627,7 +695,7 @@ if (typeof XLSX === 'undefined') {
     'sb_publishable_dVv4RXznckS17RY8UgA5yg_MLcstlj0';
 
 
-  function getVisitorId() {
+  function getVisitorId(){
 
     const key =
       'jt_attendance_visitor_id';
@@ -637,11 +705,12 @@ if (typeof XLSX === 'undefined') {
       localStorage.getItem(key);
 
 
-    if(!id) {
+    if(!id){
 
       id =
         (
-          window.crypto &&
+          window.crypto
+          &&
           crypto.randomUUID
         )
 
@@ -682,7 +751,7 @@ if (typeof XLSX === 'undefined') {
   async function logEvent(
     eventType,
     extra={}
-  ) {
+  ){
 
     const payload = {
 
@@ -710,7 +779,7 @@ if (typeof XLSX === 'undefined') {
     };
 
 
-    try {
+    try{
 
       const res =
         await fetch(
@@ -720,6 +789,7 @@ if (typeof XLSX === 'undefined') {
             method:'POST',
 
             headers:{
+
               'apikey':
                 SUPABASE_KEY,
 
@@ -731,6 +801,7 @@ if (typeof XLSX === 'undefined') {
 
               'Prefer':
                 'return=minimal'
+
             },
 
             body:
@@ -742,13 +813,14 @@ if (typeof XLSX === 'undefined') {
         );
 
 
-      if(!res.ok) {
+      if(!res.ok){
 
         console.warn(
           'Analytics event not recorded:',
           eventType,
           res.status
         );
+
 
         return false;
 
@@ -759,12 +831,13 @@ if (typeof XLSX === 'undefined') {
 
     }
 
-    catch(e) {
+    catch(e){
 
       console.warn(
         'Analytics unavailable:',
         e
       );
+
 
       return false;
 
@@ -772,10 +845,6 @@ if (typeof XLSX === 'undefined') {
 
   }
 
-
-  // Only anonymous tool usage is recorded.
-  // No employee IDs, names, Excel rows,
-  // file names or report contents are sent.
 
   logEvent(
     'page_view'
@@ -785,18 +854,25 @@ if (typeof XLSX === 'undefined') {
   const taskInput =
     $('taskFile');
 
+
   const punchInput =
     $('punchFile');
+
 
   const runBtn =
     $('runBtn');
 
 
-  let taskCtx = null;
+  let taskCtx =
+    null;
 
-  let punchCtx = null;
 
-  let outputWb = null;
+  let punchCtx =
+    null;
+
+
+  let outputWb =
+    null;
 
 
   const norm =
@@ -818,8 +894,7 @@ if (typeof XLSX === 'undefined') {
 
   const aliases = {
 
-    emp: [
-
+    emp:[
       '员工工号',
       '工号',
       '员工编号',
@@ -844,12 +919,10 @@ if (typeof XLSX === 'undefined') {
       'emp no',
       'staff id',
       'staff no'
-
     ],
 
 
-    taskDate: [
-
+    taskDate:[
       '任务日期',
       '工作日期',
       '作业日期',
@@ -866,12 +939,10 @@ if (typeof XLSX === 'undefined') {
       'work date',
       'working date',
       'shift date'
-
     ],
 
 
-    shift: [
-
+    shift:[
       '用工时段',
       '任务班次',
       '班次',
@@ -893,12 +964,10 @@ if (typeof XLSX === 'undefined') {
       'work shift',
       'working time',
       'work period'
-
     ],
 
 
-    punchTime: [
-
+    punchTime:[
       '打卡时间',
       '考勤时间',
       '刷卡时间',
@@ -924,19 +993,16 @@ if (typeof XLSX === 'undefined') {
       'timestamp',
       'date time',
       'datetime'
-
     ],
 
 
-    modifiedBy: [
-
+    modifiedBy:[
       '修改人',
       '更新人',
       'updated by',
       'modified by',
       'ผู้แก้ไข',
       'ผู้ปรับปรุง'
-
     ]
 
   };
@@ -949,7 +1015,7 @@ if (typeof XLSX === 'undefined') {
     );
 
 
-  function compactHeader(v) {
+  function compactHeader(v){
 
     return norm(v)
       .replace(
@@ -963,7 +1029,7 @@ if (typeof XLSX === 'undefined') {
   function fuzzyHeaderMatch(
     value,
     key
-  ) {
+  ){
 
     const x =
       compactHeader(value);
@@ -973,7 +1039,7 @@ if (typeof XLSX === 'undefined') {
       return false;
 
 
-    if(key === 'emp') {
+    if(key==='emp'){
 
       return (
 
@@ -1003,7 +1069,7 @@ if (typeof XLSX === 'undefined') {
 
         ||
 
-        x === '工号'
+        x==='工号'
 
         ||
 
@@ -1018,7 +1084,7 @@ if (typeof XLSX === 'undefined') {
     }
 
 
-    if(key === 'taskDate') {
+    if(key==='taskDate'){
 
       return (
 
@@ -1067,23 +1133,19 @@ if (typeof XLSX === 'undefined') {
     }
 
 
-    if(key === 'shift') {
+    if(key==='shift'){
 
       return (
 
-        x === 'กะ'
+        x==='กะ'
 
         ||
 
-        x.includes(
-          'กะการทำงาน'
-        )
+        x.includes('กะการทำงาน')
 
         ||
 
-        x.includes(
-          'ช่วงกะ'
-        )
+        x.includes('ช่วงกะ')
 
         ||
 
@@ -1120,7 +1182,7 @@ if (typeof XLSX === 'undefined') {
     }
 
 
-    if(key === 'punchTime') {
+    if(key==='punchTime'){
 
       return (
 
@@ -1177,7 +1239,7 @@ if (typeof XLSX === 'undefined') {
   function findHeaderIndex(
     row,
     key
-  ) {
+  ){
 
     const set =
       aliasSet(key);
@@ -1187,13 +1249,13 @@ if (typeof XLSX === 'undefined') {
       let i=0;
       i<row.length;
       i++
-    ) {
+    ){
 
       if(
         set.has(
           norm(row[i])
         )
-      ) {
+      ){
 
         return i;
 
@@ -1206,14 +1268,14 @@ if (typeof XLSX === 'undefined') {
       let i=0;
       i<row.length;
       i++
-    ) {
+    ){
 
       if(
         fuzzyHeaderMatch(
           row[i],
           key
         )
-      ) {
+      ){
 
         return i;
 
@@ -1227,7 +1289,7 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  function repairSheetRef(ws) {
+  function repairSheetRef(ws){
 
     const cells =
       Object.keys(ws)
@@ -1241,48 +1303,55 @@ if (typeof XLSX === 'undefined') {
       return;
 
 
-    let minR = Infinity;
-    let minC = Infinity;
-    let maxR = -1;
-    let maxC = -1;
+    let minR =
+      Infinity;
+
+    let minC =
+      Infinity;
+
+    let maxR =
+      -1;
+
+    let maxC =
+      -1;
 
 
     for(
       const addr
       of cells
-    ) {
+    ){
 
-      try {
+      try{
 
         const c =
           XLSX.utils
             .decode_cell(addr);
 
 
-        if(c.r < minR)
-          minR = c.r;
+        if(c.r<minR)
+          minR=c.r;
 
-        if(c.c < minC)
-          minC = c.c;
+        if(c.c<minC)
+          minC=c.c;
 
-        if(c.r > maxR)
-          maxR = c.r;
+        if(c.r>maxR)
+          maxR=c.r;
 
-        if(c.c > maxC)
-          maxC = c.c;
+        if(c.c>maxC)
+          maxC=c.c;
 
       }
 
-      catch(e) {}
+      catch(e){}
 
     }
 
 
     if(
-      maxR >= 0
+      maxR>=0
       &&
-      maxC >= 0
-    ) {
+      maxC>=0
+    ){
 
       ws['!ref'] =
         XLSX.utils
@@ -1342,7 +1411,7 @@ if (typeof XLSX === 'undefined') {
   function findSheetAndHeader(
     wb,
     requiredKeys
-  ) {
+  ){
 
     let best =
       null;
@@ -1351,7 +1420,7 @@ if (typeof XLSX === 'undefined') {
     for(
       const name
       of wb.SheetNames
-    ) {
+    ){
 
       const ws =
         wb.Sheets[name];
@@ -1380,7 +1449,7 @@ if (typeof XLSX === 'undefined') {
           aoa.length
         );
         r++
-      ) {
+      ){
 
         const row =
           aoa[r] || [];
@@ -1397,7 +1466,7 @@ if (typeof XLSX === 'undefined') {
         for(
           const key
           of requiredKeys
-        ) {
+        ){
 
           const idx =
             findHeaderIndex(
@@ -1410,7 +1479,7 @@ if (typeof XLSX === 'undefined') {
             idx;
 
 
-          if(idx >= 0)
+          if(idx>=0)
             score++;
 
         }
@@ -1435,7 +1504,7 @@ if (typeof XLSX === 'undefined') {
           candidate.score
           >
           best.score
-        ) {
+        ){
 
           best =
             candidate;
@@ -1447,7 +1516,7 @@ if (typeof XLSX === 'undefined') {
           score
           ===
           requiredKeys.length
-        ) {
+        ){
 
           candidate.missing =
             [];
@@ -1462,7 +1531,7 @@ if (typeof XLSX === 'undefined') {
     }
 
 
-    if(!best) {
+    if(!best){
 
       return {
 
@@ -1502,16 +1571,16 @@ if (typeof XLSX === 'undefined') {
   async function loadFile(
     file,
     kind
-  ) {
+  ){
 
     if(
       typeof XLSX
       ===
       'undefined'
-    ) {
+    ){
 
       throw new Error(
-        'Excel 组件未加载，请确认网络后刷新页面。 / ไม่สามารถโหลดส่วนประกอบ Excel ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า'
+        'ไม่สามารถโหลดส่วนประกอบ Excel ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า / Excel 组件未加载，请确认网络后刷新页面。'
       );
 
     }
@@ -1524,7 +1593,7 @@ if (typeof XLSX === 'undefined') {
     let wb;
 
 
-    try {
+    try{
 
       wb =
         XLSX.read(
@@ -1539,7 +1608,7 @@ if (typeof XLSX === 'undefined') {
 
     }
 
-    catch(e) {
+    catch(e){
 
       wb =
         XLSX.read(
@@ -1556,7 +1625,7 @@ if (typeof XLSX === 'undefined') {
 
     const req =
 
-      kind === 'task'
+      kind==='task'
 
       ?
 
@@ -1585,7 +1654,7 @@ if (typeof XLSX === 'undefined') {
       found.missing
       &&
       found.missing.length
-    ) {
+    ){
 
       const cn =
         found.missing
@@ -1607,10 +1676,10 @@ if (typeof XLSX === 'undefined') {
 
       throw new Error(
 
-        `未识别字段：${cn}。请补充该字段后重新上传。
+        `ไม่พบฟิลด์: ${th} กรุณาเพิ่มฟิลด์นี้ในรายงานแล้วอัปโหลดใหม่
 `
         +
-        `ไม่พบฟิลด์: ${th} กรุณาเพิ่มฟิลด์นี้ในรายงานแล้วอัปโหลดใหม่`
+        `未识别字段：${cn}。请补充该字段后重新上传。`
 
       );
 
@@ -1632,7 +1701,7 @@ if (typeof XLSX === 'undefined') {
     el,
     msg,
     ok
-  ) {
+  ){
 
     el.textContent =
       msg;
@@ -1648,7 +1717,7 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  function refreshRun() {
+  function refreshRun(){
 
     runBtn.disabled =
       !(
@@ -1664,6 +1733,19 @@ if (typeof XLSX === 'undefined') {
     'change',
     async()=>{
 
+      $('taskFileName').textContent =
+
+        taskInput.files[0]
+
+        ?
+
+        taskInput.files[0].name
+
+        :
+
+        'ยังไม่ได้เลือกไฟล์ / 未选择文件';
+
+
       taskCtx =
         null;
 
@@ -1674,14 +1756,14 @@ if (typeof XLSX === 'undefined') {
 
       if(
         !taskInput.files[0]
-      ) {
+      ){
 
         return refreshRun();
 
       }
 
 
-      try {
+      try{
 
         taskCtx =
           await loadFile(
@@ -1692,40 +1774,18 @@ if (typeof XLSX === 'undefined') {
 
         setState(
           $('taskState'),
-          '✓ 已识别 / ระบุไฟล์แล้ว',
+          '✓ ระบุไฟล์แล้ว / 已识别',
           true
         );
 
       }
 
-      catch(e) {
+      catch(e){
 
         setState(
           $('taskState'),
           '✕ ' + e.message,
           false
-        );
-
-
-        logEvent(
-          'file_error',
-          {
-
-            error_message:
-              String(
-                e.message || e
-              )
-              .slice(
-                0,
-                1000
-              ),
-
-            metadata:{
-              stage:
-                'task_upload'
-            }
-
-          }
         );
 
       }
@@ -1741,6 +1801,19 @@ if (typeof XLSX === 'undefined') {
     'change',
     async()=>{
 
+      $('punchFileName').textContent =
+
+        punchInput.files[0]
+
+        ?
+
+        punchInput.files[0].name
+
+        :
+
+        'ยังไม่ได้เลือกไฟล์ / 未选择文件';
+
+
       punchCtx =
         null;
 
@@ -1751,14 +1824,14 @@ if (typeof XLSX === 'undefined') {
 
       if(
         !punchInput.files[0]
-      ) {
+      ){
 
         return refreshRun();
 
       }
 
 
-      try {
+      try{
 
         punchCtx =
           await loadFile(
@@ -1769,40 +1842,18 @@ if (typeof XLSX === 'undefined') {
 
         setState(
           $('punchState'),
-          '✓ 已识别 / ระบุไฟล์แล้ว',
+          '✓ ระบุไฟล์แล้ว / 已识别',
           true
         );
 
       }
 
-      catch(e) {
+      catch(e){
 
         setState(
           $('punchState'),
           '✕ ' + e.message,
           false
-        );
-
-
-        logEvent(
-          'file_error',
-          {
-
-            error_message:
-              String(
-                e.message || e
-              )
-              .slice(
-                0,
-                1000
-              ),
-
-            metadata:{
-              stage:
-                'punch_upload'
-            }
-
-          }
         );
 
       }
@@ -1814,7 +1865,7 @@ if (typeof XLSX === 'undefined') {
   );
 
 
-  function parseDate(s) {
+  function parseDate(s){
 
     const x =
       String(s ?? '')
@@ -1827,7 +1878,7 @@ if (typeof XLSX === 'undefined') {
       );
 
 
-    if(m) {
+    if(m){
 
       return new Date(
         +m[1],
@@ -1844,7 +1895,7 @@ if (typeof XLSX === 'undefined') {
       );
 
 
-    if(m) {
+    if(m){
 
       return new Date(
         +m[3],
@@ -1868,7 +1919,7 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  function parseDateTime(s) {
+  function parseDateTime(s){
 
     const x =
       String(s ?? '')
@@ -1881,7 +1932,7 @@ if (typeof XLSX === 'undefined') {
       );
 
 
-    if(m) {
+    if(m){
 
       return new Date(
         +m[1],
@@ -1901,7 +1952,7 @@ if (typeof XLSX === 'undefined') {
       );
 
 
-    if(m) {
+    if(m){
 
       return new Date(
         +m[3],
@@ -1928,7 +1979,7 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  function shiftStartParts(s) {
+  function shiftStartParts(s){
 
     const m =
       String(s ?? '')
@@ -1949,7 +2000,7 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  function fmtDT(d) {
+  function fmtDT(d){
 
     const p =
       n =>
@@ -1981,7 +2032,7 @@ if (typeof XLSX === 'undefined') {
     base,
     part,
     addDay
-  ) {
+  ){
 
     return new Date(
 
@@ -2011,7 +2062,7 @@ if (typeof XLSX === 'undefined') {
     start,
     earlyHours,
     lateHours
-  ) {
+  ){
 
     const lo =
       start.getTime()
@@ -2077,15 +2128,15 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  function cloneWs(ws) {
+  function cloneWs(ws){
 
-    try {
+    try{
 
       return structuredClone(ws);
 
     }
 
-    catch(e) {
+    catch(e){
 
       return JSON.parse(
         JSON.stringify(ws)
@@ -2102,7 +2153,7 @@ if (typeof XLSX === 'undefined') {
     statusCol1,
     rowsCount,
     colsCount
-  ) {
+  ){
 
     ws['!freeze'] = {
 
@@ -2157,41 +2208,31 @@ if (typeof XLSX === 'undefined') {
         },
         (_,i)=>{
 
-          if(
-            i === status0
-          )
+          if(i===status0)
             return {
               wch:30
             };
 
 
-          if(
-            i === status0+1
-          )
+          if(i===status0+1)
             return {
               wch:24
             };
 
 
-          if(
-            i === status0+2
-          )
+          if(i===status0+2)
             return {
               wch:24
             };
 
 
-          if(
-            i === feedback0
-          )
+          if(i===feedback0)
             return {
               wch:42
             };
 
 
-          if(
-            i === remark0
-          )
+          if(i===remark0)
             return {
               wch:28
             };
@@ -2272,7 +2313,7 @@ if (typeof XLSX === 'undefined') {
             );
 
 
-        if(!ws[addr]) {
+        if(!ws[addr]){
 
           ws[addr] = {
             t:'s',
@@ -2326,7 +2367,7 @@ if (typeof XLSX === 'undefined') {
       let r=0;
       r<rowsCount;
       r++
-    ) {
+    ){
 
       const isHeader =
         r ===
@@ -2337,7 +2378,7 @@ if (typeof XLSX === 'undefined') {
         let c=status0;
         c<=status0+2;
         c++
-      ) {
+      ){
 
         apply(
           r,
@@ -2377,7 +2418,7 @@ if (typeof XLSX === 'undefined') {
       );
 
 
-      if(!isHeader) {
+      if(!isHeader){
 
         const addr =
           XLSX.utils
@@ -2399,7 +2440,7 @@ if (typeof XLSX === 'undefined') {
           txt.startsWith(
             'FLAG'
           )
-        ) {
+        ){
 
           ws[addr].s = {
 
@@ -2428,7 +2469,7 @@ if (typeof XLSX === 'undefined') {
           txt.startsWith(
             'OK'
           )
-        ) {
+        ){
 
           ws[addr].s = {
 
@@ -2487,7 +2528,7 @@ if (typeof XLSX === 'undefined') {
       setTimeout(
         ()=>{
 
-          try {
+          try{
 
             const earlyHours =
               +$('earlyHours').value;
@@ -2567,9 +2608,7 @@ if (typeof XLSX === 'undefined') {
               [];
 
 
-            if(
-              ti.emp < 0
-            ) {
+            if(ti.emp<0){
 
               runtimeMissing.push(
                 [
@@ -2581,9 +2620,7 @@ if (typeof XLSX === 'undefined') {
             }
 
 
-            if(
-              ti.date < 0
-            ) {
+            if(ti.date<0){
 
               runtimeMissing.push(
                 [
@@ -2595,9 +2632,7 @@ if (typeof XLSX === 'undefined') {
             }
 
 
-            if(
-              ti.shift < 0
-            ) {
+            if(ti.shift<0){
 
               runtimeMissing.push(
                 [
@@ -2609,9 +2644,7 @@ if (typeof XLSX === 'undefined') {
             }
 
 
-            if(
-              pi.emp < 0
-            ) {
+            if(pi.emp<0){
 
               runtimeMissing.push(
                 [
@@ -2623,9 +2656,7 @@ if (typeof XLSX === 'undefined') {
             }
 
 
-            if(
-              pi.time < 0
-            ) {
+            if(pi.time<0){
 
               runtimeMissing.push(
                 [
@@ -2637,9 +2668,7 @@ if (typeof XLSX === 'undefined') {
             }
 
 
-            if(
-              runtimeMissing.length
-            ) {
+            if(runtimeMissing.length){
 
               const cn =
                 runtimeMissing
@@ -2661,10 +2690,10 @@ if (typeof XLSX === 'undefined') {
 
               throw new Error(
 
-                `未识别字段：${cn}。请补充该字段后重新上传。
+                `ไม่พบฟิลด์: ${th} กรุณาเพิ่มฟิลด์นี้ในรายงานแล้วอัปโหลดใหม่
 `
                 +
-                `ไม่พบฟิลด์: ${th} กรุณาเพิ่มฟิลด์นี้ในรายงานแล้วอัปโหลดใหม่`
+                `未识别字段：${cn}。请补充该字段后重新上传。`
 
               );
 
@@ -2679,7 +2708,7 @@ if (typeof XLSX === 'undefined') {
               let r=1;
               r<pRows.length;
               r++
-            ) {
+            ){
 
               const row =
                 pRows[r];
@@ -2707,7 +2736,7 @@ if (typeof XLSX === 'undefined') {
 
               if(
                 !punchMap.has(id)
-              ) {
+              ){
 
                 punchMap.set(
                   id,
@@ -2732,11 +2761,11 @@ if (typeof XLSX === 'undefined') {
             for(
               const arr
               of punchMap.values()
-            ) {
+            ){
 
               arr.sort(
                 (a,b) =>
-                a.dt - b.dt
+                a.dt-b.dt
               );
 
             }
@@ -2744,11 +2773,11 @@ if (typeof XLSX === 'undefined') {
 
             const insertAt =
 
-              ti.mod >= 0
+              ti.mod>=0
 
               ?
 
-              ti.mod + 1
+              ti.mod+1
 
               :
 
@@ -2757,15 +2786,15 @@ if (typeof XLSX === 'undefined') {
 
             const extraHeaders = [
 
-              '上班打卡核对 / ตรวจสอบการลงเวลาเข้า',
+              'ตรวจสอบการลงเวลาเข้า / 上班打卡核对',
 
-              '匹配打卡时间 / เวลาลงเวลาที่จับคู่',
+              'เวลาลงเวลาที่จับคู่ / 匹配打卡时间',
 
-              '与班次开始差异(分钟) / ต่างจากเวลาเริ่มกะ(นาที)',
+              'ต่างจากเวลาเริ่มกะ(นาที) / 与班次开始差异(分钟)',
 
-              '供应商/劳工反馈考勤打卡成功照片 / รูปภาพยืนยันการลงเวลาเข้างานสำเร็จจากผู้ให้บริการแรงงาน/พนักงาน',
+              'รูปภาพยืนยันการลงเวลาเข้างานสำเร็จจากผู้ให้บริการแรงงาน/พนักงาน / 供应商/劳工反馈考勤打卡成功照片',
 
-              '备注 / หมายเหตุ'
+              'หมายเหตุ / 备注'
 
             ];
 
@@ -2811,7 +2840,7 @@ if (typeof XLSX === 'undefined') {
               let r=1;
               r<tRows.length;
               r++
-            ) {
+            ){
 
               const row =
                 tRows[r].slice();
@@ -2825,7 +2854,7 @@ if (typeof XLSX === 'undefined') {
                   ===
                   ''
                 )
-              ) {
+              ){
 
                 continue;
 
@@ -2854,7 +2883,7 @@ if (typeof XLSX === 'undefined') {
 
 
               let status =
-                'FLAG - 缺卡 / ไม่พบการลงเวลาเข้า';
+                'FLAG - ไม่พบการลงเวลาเข้า / 缺卡';
 
 
               let matched =
@@ -2871,7 +2900,7 @@ if (typeof XLSX === 'undefined') {
                 base
                 &&
                 part
-              ) {
+              ){
 
                 const list =
                   punchMap.get(id)
@@ -2909,10 +2938,10 @@ if (typeof XLSX === 'undefined') {
                   );
 
 
-                if(hit) {
+                if(hit){
 
                   status =
-                    'OK - 已打卡 / พบการลงเวลาเข้า';
+                    'OK - พบการลงเวลา / 已打卡เข้า';
 
 
                   matched =
@@ -2937,7 +2966,7 @@ if (typeof XLSX === 'undefined') {
 
                 }
 
-                else {
+                else{
 
                   flag++;
 
@@ -2945,10 +2974,10 @@ if (typeof XLSX === 'undefined') {
 
               }
 
-              else {
+              else{
 
                 status =
-                  'FLAG - 数据异常 / ข้อมูลผิดปกติ';
+                  'FLAG - ข้อมูลผิดปกติ / 数据异常';
 
 
                 flag++;
@@ -3027,9 +3056,7 @@ if (typeof XLSX === 'undefined') {
                   );
 
 
-                if(
-                  af === bf
-                ) {
+                if(af===bf){
 
                   return 0;
 
@@ -3145,7 +3172,7 @@ if (typeof XLSX === 'undefined') {
 
           }
 
-          catch(e) {
+          catch(e){
 
             console.error(e);
 
@@ -3196,7 +3223,7 @@ if (typeof XLSX === 'undefined') {
 
           }
 
-          finally {
+          finally{
 
             $('loader').style.display =
               'none';
@@ -3313,7 +3340,7 @@ if (typeof XLSX === 'undefined') {
     helpfulSelected
     &&
     helpfulBtn
-  ) {
+  ){
 
     helpfulBtn
       .classList
@@ -3323,12 +3350,12 @@ if (typeof XLSX === 'undefined') {
 
 
     helpfulStatus.textContent =
-      '谢谢反馈 / ขอบคุณสำหรับความคิดเห็น';
+      'ขอบคุณสำหรับความคิดเห็น / 谢谢反馈';
 
   }
 
 
-  if(helpfulBtn) {
+  if(helpfulBtn){
 
     helpfulBtn.addEventListener(
       'click',
@@ -3360,7 +3387,7 @@ if (typeof XLSX === 'undefined') {
 
 
         helpfulStatus.textContent =
-          '谢谢反馈 / ขอบคุณสำหรับความคิดเห็น';
+          'ขอบคุณสำหรับความคิดเห็น / 谢谢反馈';
 
 
         await logEvent(
@@ -3373,7 +3400,7 @@ if (typeof XLSX === 'undefined') {
   }
 
 
-  if(feedbackSubmit) {
+  if(feedbackSubmit){
 
     feedbackSubmit.addEventListener(
       'click',
@@ -3388,14 +3415,14 @@ if (typeof XLSX === 'undefined') {
           .trim();
 
 
-        if(!txt) {
+        if(!txt){
 
           feedbackStatus.style.color =
             'var(--bad)';
 
 
           feedbackStatus.textContent =
-            '请填写建议 / กรุณากรอกข้อเสนอแนะ';
+            'กรุณากรอกข้อเสนอแนะ / 请填写建议';
 
 
           return;
@@ -3426,14 +3453,14 @@ if (typeof XLSX === 'undefined') {
           false;
 
 
-        if(saved) {
+        if(saved){
 
           feedbackStatus.style.color =
             'var(--muted)';
 
 
           feedbackStatus.textContent =
-            '建议已提交 / ส่งข้อเสนอแนะแล้ว';
+            'ส่งข้อเสนอแนะแล้ว / 建议已提交';
 
 
           feedbackText.value =
@@ -3441,14 +3468,14 @@ if (typeof XLSX === 'undefined') {
 
         }
 
-        else {
+        else{
 
           feedbackStatus.style.color =
             'var(--bad)';
 
 
           feedbackStatus.textContent =
-            '提交失败，请稍后重试 / ส่งไม่สำเร็จ กรุณาลองอีกครั้ง';
+            'ส่งไม่สำเร็จ กรุณาลองอีกครั้ง / 提交失败，请稍后重试';
 
         }
 
