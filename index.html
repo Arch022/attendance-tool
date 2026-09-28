@@ -17,7 +17,9 @@
     --bad:#c62828;
   }
 
-  *{box-sizing:border-box}
+  *{
+    box-sizing:border-box
+  }
 
   body{
     margin:0;
@@ -50,6 +52,12 @@
   h1{
     font-size:24px;
     margin:0 0 6px
+  }
+
+  .sub{
+    color:var(--muted);
+    font-size:10px;
+    margin-bottom:24px
   }
 
   .step{
@@ -100,6 +108,10 @@
   .file-name{
     font-size:12px;
     color:var(--muted)
+  }
+
+  input[type=file]{
+    max-width:100%
   }
 
   .recognized{
@@ -190,6 +202,13 @@
     background:#0f7b45
   }
 
+  .foot{
+    font-size:12px;
+    color:var(--muted);
+    margin-top:16px;
+    line-height:1.5
+  }
+
   .loader{
     display:none;
     text-align:center;
@@ -199,23 +218,39 @@
 
   .scope-highlight{
     margin-top:12px;
-    padding:11px 13px;
-    border:1px solid #c9daf2;
+    padding:12px 14px;
+    border:1.5px solid #9fc2ef;
     border-radius:10px;
-    background:#f4f8ff
+    background:#f7faff
   }
 
   .scope-main{
-    font-size:14px;
-    font-weight:700;
-    color:#245b96;
-    margin-bottom:5px
+    font-size:15px;
+    font-weight:800;
+    color:#174f87;
+    margin-bottom:8px
   }
 
-  .scope-sub{
+  .scope-item{
+    padding:7px 0;
     font-size:12px;
     line-height:1.55;
-    color:var(--muted)
+    color:#2f3b49;
+    border-top:1px solid #e4edf7
+  }
+
+  .scope-item:first-of-type{
+    border-top:0;
+    padding-top:2px
+  }
+
+  .scope-item b{
+    color:#1f4f82;
+    font-size:12.5px
+  }
+
+  .scope-item span{
+    color:#5f6b78
   }
 
   .feedback-shell{
@@ -270,6 +305,24 @@
     color:#174f87
   }
 
+  .feedback-shell textarea{
+    width:100%;
+    min-height:46px;
+    resize:vertical;
+    border:1px solid var(--line);
+    border-radius:9px;
+    padding:7px;
+    font:inherit;
+    font-size:13px
+  }
+
+  .feedback-status{
+    min-height:18px;
+    margin-top:7px;
+    font-size:10px;
+    color:var(--ok)
+  }
+
   .helpful-status{
     min-height:16px;
     margin-top:5px;
@@ -292,20 +345,13 @@
     line-height:1.45
   }
 
-  .feedback-shell textarea{
-    width:100%;
-    min-height:46px;
-    resize:vertical;
-    border:1px solid #e3e7ec;
-    border-radius:9px;
-    padding:7px;
-    font:inherit;
-    font-size:13px;
-    background:#fff;
+  .optional-wrap textarea{
+    background:#ffffff;
+    border-color:#e3e7ec;
     color:#5f6875
   }
 
-  .feedback-shell textarea::placeholder{
+  .optional-wrap textarea::placeholder{
     color:#b0b7c0
   }
 
@@ -326,13 +372,6 @@
   .feedback-submit:hover{
     background:#f0f3f6;
     border-color:#cfd6de
-  }
-
-  .feedback-status{
-    min-height:18px;
-    margin-top:7px;
-    font-size:10px;
-    color:var(--ok)
   }
 
   @media(max-width:900px){
@@ -361,7 +400,7 @@
 </style>
 
 <script>
-window._xlsxStyleLoadFailed = false;
+  window._xlsxStyleLoadFailed = false;
 </script>
 
 <script
@@ -370,19 +409,19 @@ window._xlsxStyleLoadFailed = false;
 </script>
 
 <script>
-if(typeof XLSX === 'undefined'){
-  document.write(
-    '<script src="https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"><\/script>'
-  );
-}
+  if(typeof XLSX === 'undefined'){
+    document.write(
+      '<script src="https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"><\/script>'
+    );
+  }
 </script>
 
 <script>
-if(typeof XLSX === 'undefined'){
-  document.write(
-    '<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"><\/script>'
-  );
-}
+  if(typeof XLSX === 'undefined'){
+    document.write(
+      '<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"><\/script>'
+    );
+  }
 </script>
 
 </head>
@@ -395,26 +434,73 @@ if(typeof XLSX === 'undefined'){
     <div class="card">
 
       <h1>
-        เครื่องมือตรวจสอบการขาดการลงเวลาเข้างานของแรงงานจ้างเหมา J&T ประเทศไทย V5
+        เครื่องมือตรวจสอบการลงเวลาเข้างานแบบเช็กชื่ออย่างรวดเร็วสำหรับแรงงานจ้างเหมา J&T ประเทศไทย V5
         <br>
         <span style="font-size:18px;font-weight:600">
-          J&T泰国劳务工上班缺卡核对工具 V5
+          J&T泰国劳务工上班打卡快速点名核对工具 V5
         </span>
       </h1>
+
 
       <div class="scope-highlight">
 
         <div class="scope-main">
-          ✅ ใช้สำหรับตรวจสอบการลงเวลาเข้างานเท่านั้น / 仅适用上班卡核对
+          ข้อควรทราบ / 注意事项
         </div>
 
-        <div class="scope-sub">
-          ใช้สำหรับตรวจสอบ “ขาดการลงเวลาเข้างาน” หลังเริ่มกะเท่านั้น เมื่อสิ้นสุดกะแล้ว กรุณาส่งออกรายงานเวลาทำงานฉบับเต็มจาก JMS เพื่อตรวจสอบขั้นสุดท้าย โดยไม่จำเป็นต้องใช้เครื่องมือนี้
+        <div class="scope-item">
+          <b>
+            1. ใช้สำหรับตรวจสอบการลงเวลาเข้างานเท่านั้น (เหมือนการเช็กชื่อ)
+          </b>
           <br>
-          仅用于班次开始后的“上班缺卡”快速核对；班次结束后请直接从 JMS 导出完整考勤报告进行最终核对，无需再使用本工具。
+
+          ตรวจสอบว่าพนักงานมาทำงานและมีการลงเวลาเข้างานหรือไม่
+          เพื่อให้สามารถดำเนินการขอเพิ่มบันทึกเวลาเข้าได้ทันก่อนสิ้นสุดกะ
+
+          <br>
+
+          <span>
+            1. 仅用于上班卡核对（类似点名）：确认员工是否到岗并完成上班打卡，以便在班次结束前对上班卡及时补卡。
+          </span>
+        </div>
+
+
+        <div class="scope-item">
+          <b>
+            2. เมื่อสิ้นสุดกะ ให้ตรวจสอบ &lt;&lt;สถิติการทำงาน&gt;&gt; ในระบบ JMS
+          </b>
+          <br>
+
+          หลังสิ้นสุดกะ ไม่ต้องอ้างอิงผลจากเครื่องมือนี้อีก
+          ให้ใช้ข้อมูลจาก &lt;&lt;สถิติการทำงาน&gt;&gt; ใน JMS
+          เพื่อตรวจสอบความผิดปกติของเวลาทำงาน
+
+          <br>
+
+          <span>
+            2. 班次结束后，请直接查看 JMS 中的 &lt;&lt;考勤统计报告&gt;&gt;，无需再参考本工具的核对结果。
+          </span>
+        </div>
+
+
+        <div class="scope-item">
+          <b>
+            3. ข้อมูลการลงเวลาและความผิดปกติทั้งหมดให้ยึดตาม
+            &lt;&lt;สถิติการทำงาน&gt;&gt; ใน JMS
+          </b>
+          <br>
+
+          เช่น ขาดงาน มาสาย ออกก่อนเวลา OT และความผิดปกติอื่น ๆ
+
+          <br>
+
+          <span>
+            3. 所有考勤数据及异常（缺勤、迟到、早退、加班等），均以 JMS &lt;&lt;考勤统计报告&gt;&gt; 为最终依据。
+          </span>
         </div>
 
       </div>
+
 
       <div class="step">
 
@@ -610,17 +696,20 @@ if(typeof XLSX === 'undefined'){
         ข้อเสนอแนะ / 反馈
       </div>
 
+
       <div class="feedback-help">
         ความคิดเห็นของคุณช่วยให้เราปรับปรุงได้อย่างต่อเนื่อง
         <br>
         您的反馈将帮助我们持续改善。
       </div>
 
+
       <div style="font-size:11px;font-weight:600;line-height:1.35">
         เครื่องมือนี้มีประโยชน์หรือไม่?
         <br>
         这个工具有帮助吗？
       </div>
+
 
       <div class="helpful-row">
 
@@ -633,6 +722,7 @@ if(typeof XLSX === 'undefined'){
 
       </div>
 
+
       <div
         id="helpfulStatus"
         class="helpful-status">
@@ -644,22 +734,29 @@ if(typeof XLSX === 'undefined'){
         <label
           for="feedbackText"
           class="optional-label">
+
           ข้อเสนอแนะเพิ่มเติม (ไม่บังคับ)
           <br>
           其他建议（可选）
+
         </label>
+
 
         <textarea
           id="feedbackText"
           placeholder="กรุณากรอก / 请输入">
         </textarea>
 
+
         <button
           id="feedbackSubmit"
           type="button"
           class="feedback-submit">
+
           ส่งข้อเสนอแนะ / 提交建议
+
         </button>
+
 
         <div
           id="feedbackStatus"
@@ -846,6 +943,10 @@ if(typeof XLSX === 'undefined'){
   }
 
 
+  // Anonymous usage only.
+  // No Excel rows, employee IDs, names,
+  // file names or report contents are sent.
+
   logEvent(
     'page_view'
   );
@@ -894,7 +995,8 @@ if(typeof XLSX === 'undefined'){
 
   const aliases = {
 
-    emp:[
+    emp: [
+
       '员工工号',
       '工号',
       '员工编号',
@@ -919,10 +1021,12 @@ if(typeof XLSX === 'undefined'){
       'emp no',
       'staff id',
       'staff no'
+
     ],
 
 
-    taskDate:[
+    taskDate: [
+
       '任务日期',
       '工作日期',
       '作业日期',
@@ -939,10 +1043,12 @@ if(typeof XLSX === 'undefined'){
       'work date',
       'working date',
       'shift date'
+
     ],
 
 
-    shift:[
+    shift: [
+
       '用工时段',
       '任务班次',
       '班次',
@@ -964,10 +1070,12 @@ if(typeof XLSX === 'undefined'){
       'work shift',
       'working time',
       'work period'
+
     ],
 
 
-    punchTime:[
+    punchTime: [
+
       '打卡时间',
       '考勤时间',
       '刷卡时间',
@@ -993,16 +1101,19 @@ if(typeof XLSX === 'undefined'){
       'timestamp',
       'date time',
       'datetime'
+
     ],
 
 
-    modifiedBy:[
+    modifiedBy: [
+
       '修改人',
       '更新人',
       'updated by',
       'modified by',
       'ผู้แก้ไข',
       'ผู้ปรับปรุง'
+
     ]
 
   };
@@ -1039,7 +1150,7 @@ if(typeof XLSX === 'undefined'){
       return false;
 
 
-    if(key==='emp'){
+    if(key === 'emp'){
 
       return (
 
@@ -1069,7 +1180,7 @@ if(typeof XLSX === 'undefined'){
 
         ||
 
-        x==='工号'
+        x === '工号'
 
         ||
 
@@ -1084,7 +1195,7 @@ if(typeof XLSX === 'undefined'){
     }
 
 
-    if(key==='taskDate'){
+    if(key === 'taskDate'){
 
       return (
 
@@ -1133,19 +1244,23 @@ if(typeof XLSX === 'undefined'){
     }
 
 
-    if(key==='shift'){
+    if(key === 'shift'){
 
       return (
 
-        x==='กะ'
+        x === 'กะ'
 
         ||
 
-        x.includes('กะการทำงาน')
+        x.includes(
+          'กะการทำงาน'
+        )
 
         ||
 
-        x.includes('ช่วงกะ')
+        x.includes(
+          'ช่วงกะ'
+        )
 
         ||
 
@@ -1182,7 +1297,7 @@ if(typeof XLSX === 'undefined'){
     }
 
 
-    if(key==='punchTime'){
+    if(key === 'punchTime'){
 
       return (
 
@@ -1328,17 +1443,17 @@ if(typeof XLSX === 'undefined'){
             .decode_cell(addr);
 
 
-        if(c.r<minR)
-          minR=c.r;
+        if(c.r < minR)
+          minR = c.r;
 
-        if(c.c<minC)
-          minC=c.c;
+        if(c.c < minC)
+          minC = c.c;
 
-        if(c.r>maxR)
-          maxR=c.r;
+        if(c.r > maxR)
+          maxR = c.r;
 
-        if(c.c>maxC)
-          maxC=c.c;
+        if(c.c > maxC)
+          maxC = c.c;
 
       }
 
@@ -1348,9 +1463,9 @@ if(typeof XLSX === 'undefined'){
 
 
     if(
-      maxR>=0
+      maxR >= 0
       &&
-      maxC>=0
+      maxC >= 0
     ){
 
       ws['!ref'] =
@@ -1479,7 +1594,7 @@ if(typeof XLSX === 'undefined'){
             idx;
 
 
-          if(idx>=0)
+          if(idx >= 0)
             score++;
 
         }
@@ -1625,7 +1740,7 @@ if(typeof XLSX === 'undefined'){
 
     const req =
 
-      kind==='task'
+      kind === 'task'
 
       ?
 
@@ -2034,25 +2149,29 @@ if(typeof XLSX === 'undefined'){
     addDay
   ){
 
-    return new Date(
+    const d =
+      new Date(
 
-      base.getFullYear(),
+        base.getFullYear(),
 
-      base.getMonth(),
+        base.getMonth(),
 
-      base.getDate()
-      +
-      addDay,
+        base.getDate()
+        +
+        addDay,
 
-      part.h,
+        part.h,
 
-      part.m,
+        part.m,
 
-      0,
+        0,
 
-      0
+        0
 
-    );
+      );
+
+
+    return d;
 
   }
 
@@ -2208,31 +2327,31 @@ if(typeof XLSX === 'undefined'){
         },
         (_,i)=>{
 
-          if(i===status0)
+          if(i === status0)
             return {
               wch:30
             };
 
 
-          if(i===status0+1)
+          if(i === status0+1)
             return {
               wch:24
             };
 
 
-          if(i===status0+2)
+          if(i === status0+2)
             return {
               wch:24
             };
 
 
-          if(i===feedback0)
+          if(i === feedback0)
             return {
               wch:42
             };
 
 
-          if(i===remark0)
+          if(i === remark0)
             return {
               wch:28
             };
@@ -2608,7 +2727,7 @@ if(typeof XLSX === 'undefined'){
               [];
 
 
-            if(ti.emp<0){
+            if(ti.emp < 0){
 
               runtimeMissing.push(
                 [
@@ -2620,7 +2739,7 @@ if(typeof XLSX === 'undefined'){
             }
 
 
-            if(ti.date<0){
+            if(ti.date < 0){
 
               runtimeMissing.push(
                 [
@@ -2632,7 +2751,7 @@ if(typeof XLSX === 'undefined'){
             }
 
 
-            if(ti.shift<0){
+            if(ti.shift < 0){
 
               runtimeMissing.push(
                 [
@@ -2644,7 +2763,7 @@ if(typeof XLSX === 'undefined'){
             }
 
 
-            if(pi.emp<0){
+            if(pi.emp < 0){
 
               runtimeMissing.push(
                 [
@@ -2656,7 +2775,7 @@ if(typeof XLSX === 'undefined'){
             }
 
 
-            if(pi.time<0){
+            if(pi.time < 0){
 
               runtimeMissing.push(
                 [
@@ -2765,7 +2884,7 @@ if(typeof XLSX === 'undefined'){
 
               arr.sort(
                 (a,b) =>
-                a.dt-b.dt
+                a.dt - b.dt
               );
 
             }
@@ -2773,11 +2892,11 @@ if(typeof XLSX === 'undefined'){
 
             const insertAt =
 
-              ti.mod>=0
+              ti.mod >= 0
 
               ?
 
-              ti.mod+1
+              ti.mod + 1
 
               :
 
@@ -3056,7 +3175,7 @@ if(typeof XLSX === 'undefined'){
                   );
 
 
-                if(af===bf){
+                if(af === bf){
 
                   return 0;
 
