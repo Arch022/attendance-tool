@@ -54,12 +54,6 @@
     margin:0 0 6px
   }
 
-  .sub{
-    color:var(--muted);
-    font-size:10px;
-    margin-bottom:24px
-  }
-
   .step{
     border:1px solid var(--line);
     border-radius:12px;
@@ -108,10 +102,6 @@
   .file-name{
     font-size:12px;
     color:var(--muted)
-  }
-
-  input[type=file]{
-    max-width:100%
   }
 
   .recognized{
@@ -200,13 +190,6 @@
   .download{
     margin-top:12px;
     background:#0f7b45
-  }
-
-  .foot{
-    font-size:12px;
-    color:var(--muted);
-    margin-top:16px;
-    line-height:1.5
   }
 
   .loader{
@@ -305,24 +288,6 @@
     color:#174f87
   }
 
-  .feedback-shell textarea{
-    width:100%;
-    min-height:46px;
-    resize:vertical;
-    border:1px solid var(--line);
-    border-radius:9px;
-    padding:7px;
-    font:inherit;
-    font-size:13px
-  }
-
-  .feedback-status{
-    min-height:18px;
-    margin-top:7px;
-    font-size:10px;
-    color:var(--ok)
-  }
-
   .helpful-status{
     min-height:16px;
     margin-top:5px;
@@ -345,13 +310,20 @@
     line-height:1.45
   }
 
-  .optional-wrap textarea{
-    background:#ffffff;
-    border-color:#e3e7ec;
+  .feedback-shell textarea{
+    width:100%;
+    min-height:46px;
+    resize:vertical;
+    border:1px solid #e3e7ec;
+    border-radius:9px;
+    padding:7px;
+    font:inherit;
+    font-size:13px;
+    background:#fff;
     color:#5f6875
   }
 
-  .optional-wrap textarea::placeholder{
+  .feedback-shell textarea::placeholder{
     color:#b0b7c0
   }
 
@@ -372,6 +344,13 @@
   .feedback-submit:hover{
     background:#f0f3f6;
     border-color:#cfd6de
+  }
+
+  .feedback-status{
+    min-height:18px;
+    margin-top:7px;
+    font-size:10px;
+    color:var(--ok)
   }
 
   @media(max-width:900px){
@@ -400,7 +379,7 @@
 </style>
 
 <script>
-  window._xlsxStyleLoadFailed = false;
+window._xlsxStyleLoadFailed=false;
 </script>
 
 <script
@@ -409,19 +388,19 @@
 </script>
 
 <script>
-  if(typeof XLSX === 'undefined'){
-    document.write(
-      '<script src="https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"><\/script>'
-    );
-  }
+if(typeof XLSX==='undefined'){
+  document.write(
+    '<script src="https://unpkg.com/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"><\/script>'
+  );
+}
 </script>
 
 <script>
-  if(typeof XLSX === 'undefined'){
-    document.write(
-      '<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"><\/script>'
-    );
-  }
+if(typeof XLSX==='undefined'){
+  document.write(
+    '<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"><\/script>'
+  );
+}
 </script>
 
 </head>
@@ -429,345 +408,323 @@
 <body>
 
 <div class="wrap">
-  <div class="layout">
-
-    <div class="card">
-
-      <h1>
-        เครื่องมือตรวจสอบการลงเวลาเข้างานแบบเช็กชื่ออย่างรวดเร็วสำหรับแรงงานจ้างเหมา J&T ประเทศไทย V5
-        <br>
-        <span style="font-size:18px;font-weight:600">
-          J&T泰国劳务工上班打卡快速点名核对工具 V5
-        </span>
-      </h1>
-
-
-      <div class="scope-highlight">
-
-        <div class="scope-main">
-          ข้อควรทราบ / 注意事项
-        </div>
-
-        <div class="scope-item">
-          <b>
-            1. ใช้สำหรับตรวจสอบการลงเวลาเข้างานเท่านั้น (เหมือนการเช็กชื่อ)
-          </b>
-          <br>
-
-          ตรวจสอบว่าพนักงานมาทำงานและมีการลงเวลาเข้างานหรือไม่
-          เพื่อให้สามารถดำเนินการขอเพิ่มบันทึกเวลาเข้าได้ทันก่อนสิ้นสุดกะ
-
-          <br>
-
-          <span>
-            1. 仅用于上班卡核对（类似点名）：确认员工是否到岗并完成上班打卡，以便在班次结束前对上班卡及时补卡。
-          </span>
-        </div>
-
-
-        <div class="scope-item">
-          <b>
-            2. เมื่อสิ้นสุดกะ ให้ตรวจสอบ &lt;&lt;สถิติการทำงาน&gt;&gt; ในระบบ JMS
-          </b>
-          <br>
-
-          หลังสิ้นสุดกะ ไม่ต้องอ้างอิงผลจากเครื่องมือนี้อีก
-          ให้ใช้ข้อมูลจาก &lt;&lt;สถิติการทำงาน&gt;&gt; ใน JMS
-          เพื่อตรวจสอบความผิดปกติของเวลาทำงาน
-
-          <br>
-
-          <span>
-            2. 班次结束后，请直接查看 JMS 中的 &lt;&lt;考勤统计报告&gt;&gt;，无需再参考本工具的核对结果。
-          </span>
-        </div>
-
-
-        <div class="scope-item">
-          <b>
-            3. ข้อมูลการลงเวลาและความผิดปกติทั้งหมดให้ยึดตาม
-            &lt;&lt;สถิติการทำงาน&gt;&gt; ใน JMS
-          </b>
-          <br>
-
-          เช่น ขาดงาน มาสาย ออกก่อนเวลา OT และความผิดปกติอื่น ๆ
-
-          <br>
-
-          <span>
-            3. 所有考勤数据及异常（缺勤、迟到、早退、加班等），均以 JMS &lt;&lt;考勤统计报告&gt;&gt; 为最终依据。
-          </span>
-        </div>
-
-      </div>
-
-
-      <div class="step">
-
-        <div class="label">
-          1. รายงานรายชื่อพนักงานตามกะ / 任务人员报告
-        </div>
-
-        <div class="fileline">
-
-          <label
-            class="file-picker"
-            for="taskFile">
-            เลือกไฟล์ / 选择文件
-          </label>
-
-          <input
-            id="taskFile"
-            class="file-input-hidden"
-            type="file"
-            accept=".xlsx,.xls"
-          />
-
-          <span
-            id="taskFileName"
-            class="file-name">
-            ยังไม่ได้เลือกไฟล์ / 未选择文件
-          </span>
-
-          <span id="taskState"></span>
-
-        </div>
-
-        <div class="hint">
-          ฟิลด์ที่ระบบรองรับ / 识别字段：
-          รหัสประจำตัวพนักงาน / 员工工号/工号、
-          วันที่ปฏิบัติงาน / 任务日期、
-          ช่วงเวลาการทำงาน/กะ / 用工时段/班次
-        </div>
-
-      </div>
-
-
-      <div class="step">
-
-        <div class="label">
-          2. รายงานการลงเวลา / 打卡报告
-        </div>
-
-        <div class="fileline">
-
-          <label
-            class="file-picker"
-            for="punchFile">
-            เลือกไฟล์ / 选择文件
-          </label>
-
-          <input
-            id="punchFile"
-            class="file-input-hidden"
-            type="file"
-            accept=".xlsx,.xls"
-          />
-
-          <span
-            id="punchFileName"
-            class="file-name">
-            ยังไม่ได้เลือกไฟล์ / 未选择文件
-          </span>
-
-          <span id="punchState"></span>
-
-        </div>
-
-        <div class="hint">
-          ฟิลด์ที่ระบบรองรับ / 识别字段：
-          รหัสประจำตัวพนักงาน / 员工工号/工号、
-          เวลาที่บันทึก / 打卡时间
-        </div>
-
-      </div>
-
-
-      <details>
-
-        <summary>
-          ตั้งค่า: ช่วงเวลาการลงเวลาที่มีผล (โดยทั่วไปไม่ต้องแก้ไข)
-          /
-          设置：打卡有效时间范围（一般无需修改）
-        </summary>
-
-        <div class="settings">
-
-          <label>
-            อนุญาตให้ลงเวลาก่อนเริ่มกะ / 允许提前打卡：
-
-            <select id="earlyHours">
-              <option value="1">1 ชั่วโมง / 1小时</option>
-              <option value="2" selected>2 ชั่วโมง / 2小时</option>
-              <option value="3">3 ชั่วโมง / 3小时</option>
-              <option value="5">5 ชั่วโมง / 5小时</option>
-            </select>
-
-          </label>
-
-
-          <label>
-            อนุญาตให้ลงเวลาหลังเริ่มกะ / 允许班次开始后打卡：
-
-            <select id="lateHours">
-              <option value="0.5">30 นาที / 0.5小时</option>
-              <option value="1" selected>1 ชั่วโมง / 1小时</option>
-              <option value="2">2 ชั่วโมง / 2小时</option>
-              <option value="3">3 ชั่วโมง / 3小时</option>
-              <option value="5">5 ชั่วโมง / 5小时</option>
-            </select>
-
-          </label>
-
-        </div>
-
-      </details>
-
-
-      <button
-        id="runBtn"
-        class="btn"
-        disabled>
-        สร้างรายงานตรวจสอบ / 生成核对报告
-      </button>
-
-
-      <div
-        id="loader"
-        class="loader">
-        กำลังตรวจสอบ โปรดรอสักครู่… / 正在核对，请稍候…
-      </div>
-
-
-      <div
-        id="globalError"
-        class="error"
-        style="margin-top:12px">
-      </div>
-
-
-      <div
-        id="result"
-        class="result">
-
-        <b>
-          ตรวจสอบเสร็จแล้ว / 核对完成
-        </b>
-
-        <div class="stats">
-
-          <div class="stat">
-            <span>
-              จำนวนพนักงานตามกะ / 任务人数
-            </span>
-            <b id="totalN">0</b>
-          </div>
-
-          <div class="stat">
-            <span>
-              พบการลงเวลา / 已打卡
-            </span>
-            <b id="okN">0</b>
-          </div>
-
-          <div class="stat bad">
-            <span>
-              FLAG ไม่พบการลงเวลา / 缺卡
-            </span>
-            <b id="flagN">0</b>
-          </div>
-
-        </div>
-
-        <button
-          id="downloadBtn"
-          class="btn download">
-          ดาวน์โหลดไฟล์ Excel 3 Sheet / 下载 3-Sheet Excel
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <aside class="feedback-shell">
-
-      <div class="feedback-title">
-        ข้อเสนอแนะ / 反馈
-      </div>
-
-
-      <div class="feedback-help">
-        ความคิดเห็นของคุณช่วยให้เราปรับปรุงได้อย่างต่อเนื่อง
-        <br>
-        您的反馈将帮助我们持续改善。
-      </div>
-
-
-      <div style="font-size:11px;font-weight:600;line-height:1.35">
-        เครื่องมือนี้มีประโยชน์หรือไม่?
-        <br>
-        这个工具有帮助吗？
-      </div>
-
-
-      <div class="helpful-row">
-
-        <button
-          id="helpfulBtn"
-          type="button"
-          class="helpful-btn">
-          👍 มีประโยชน์ / 有帮助
-        </button>
-
-      </div>
-
-
-      <div
-        id="helpfulStatus"
-        class="helpful-status">
-      </div>
-
-
-      <div class="optional-wrap">
-
-        <label
-          for="feedbackText"
-          class="optional-label">
-
-          ข้อเสนอแนะเพิ่มเติม (ไม่บังคับ)
-          <br>
-          其他建议（可选）
-
-        </label>
-
-
-        <textarea
-          id="feedbackText"
-          placeholder="กรุณากรอก / 请输入">
-        </textarea>
-
-
-        <button
-          id="feedbackSubmit"
-          type="button"
-          class="feedback-submit">
-
-          ส่งข้อเสนอแนะ / 提交建议
-
-        </button>
-
-
-        <div
-          id="feedbackStatus"
-          class="feedback-status">
-        </div>
-
-      </div>
-
-    </aside>
+<div class="layout">
+
+<div class="card">
+
+<h1>
+  เครื่องมือตรวจสอบการลงเวลาเข้างานแบบเช็กชื่ออย่างรวดเร็วสำหรับแรงงานจ้างเหมา J&T ประเทศไทย V5
+  <br>
+  <span style="font-size:18px;font-weight:600">
+    J&T泰国劳务工上班打卡快速点名核对工具 V5
+  </span>
+</h1>
+
+
+<div class="scope-highlight">
+
+  <div class="scope-main">
+    ข้อควรทราบ / 注意事项
+  </div>
+
+  <div class="scope-item">
+    <b>
+      1. ใช้สำหรับตรวจสอบการลงเวลาเข้างานเท่านั้น (เหมือนการเช็กชื่อ)
+    </b>
+    <br>
+    ตรวจสอบว่าพนักงานมาทำงานและมีการลงเวลาเข้างานหรือไม่
+    เพื่อให้สามารถดำเนินการขอเพิ่มบันทึกเวลาเข้าได้ทันก่อนสิ้นสุดกะ
+    <br>
+    <span>
+      1. 仅用于上班卡核对（类似点名）：确认员工是否到岗并完成上班打卡，以便在班次结束前对上班卡及时补卡。
+    </span>
+  </div>
+
+  <div class="scope-item">
+    <b>
+      2. เมื่อสิ้นสุดกะ ให้ตรวจสอบ &lt;&lt;สถิติการทำงาน&gt;&gt; ในระบบ JMS
+    </b>
+    <br>
+    หลังสิ้นสุดกะ ไม่ต้องอ้างอิงผลจากเครื่องมือนี้อีก
+    ให้ใช้ข้อมูลจาก &lt;&lt;สถิติการทำงาน&gt;&gt; ใน JMS
+    เพื่อตรวจสอบความผิดปกติของเวลาทำงาน
+    <br>
+    <span>
+      2. 班次结束后，请直接查看 JMS 中的 &lt;&lt;考勤统计报告&gt;&gt;，无需再参考本工具的核对结果。
+    </span>
+  </div>
+
+  <div class="scope-item">
+    <b>
+      3. ข้อมูลการลงเวลาและความผิดปกติทั้งหมดให้ยึดตาม
+      &lt;&lt;สถิติการทำงาน&gt;&gt; ใน JMS
+    </b>
+    <br>
+    เช่น ขาดงาน มาสาย ออกก่อนเวลา OT และความผิดปกติอื่น ๆ
+    <br>
+    <span>
+      3. 所有考勤数据及异常（缺勤、迟到、早退、加班等），均以 JMS &lt;&lt;考勤统计报告&gt;&gt; 为最终依据。
+    </span>
+  </div>
+
+</div>
+
+
+<div class="step">
+
+  <div class="label">
+    1. รายงานรายชื่อพนักงานตามกะ / 任务人员报告
+  </div>
+
+  <div class="fileline">
+
+    <label
+      class="file-picker"
+      for="taskFile">
+      เลือกไฟล์ / 选择文件
+    </label>
+
+    <input
+      id="taskFile"
+      class="file-input-hidden"
+      type="file"
+      accept=".xlsx,.xls"
+    />
+
+    <span
+      id="taskFileName"
+      class="file-name">
+      ยังไม่ได้เลือกไฟล์ / 未选择文件
+    </span>
+
+    <span id="taskState"></span>
 
   </div>
+
+  <div class="hint">
+    ฟิลด์ที่ระบบรองรับ / 识别字段：
+    รหัสประจำตัวพนักงาน / 员工工号/工号、
+    วันที่ปฏิบัติงาน / 任务日期、
+    ช่วงเวลาการทำงาน/กะ / 用工时段/班次
+  </div>
+
+</div>
+
+
+<div class="step">
+
+  <div class="label">
+    2. รายงานการลงเวลา / 打卡报告
+  </div>
+
+  <div class="fileline">
+
+    <label
+      class="file-picker"
+      for="punchFile">
+      เลือกไฟล์ / 选择文件
+    </label>
+
+    <input
+      id="punchFile"
+      class="file-input-hidden"
+      type="file"
+      accept=".xlsx,.xls"
+    />
+
+    <span
+      id="punchFileName"
+      class="file-name">
+      ยังไม่ได้เลือกไฟล์ / 未选择文件
+    </span>
+
+    <span id="punchState"></span>
+
+  </div>
+
+  <div class="hint">
+    ฟิลด์ที่ระบบรองรับ / 识别字段：
+    รหัสประจำตัวพนักงาน / 员工工号/工号、
+    เวลาที่บันทึก / 打卡时间
+  </div>
+
+</div>
+
+
+<details>
+
+  <summary>
+    ตั้งค่า: ช่วงเวลาการลงเวลาที่มีผล (โดยทั่วไปไม่ต้องแก้ไข)
+    /
+    设置：打卡有效时间范围（一般无需修改）
+  </summary>
+
+  <div class="settings">
+
+    <label>
+      อนุญาตให้ลงเวลาก่อนเริ่มกะ / 允许提前打卡：
+
+      <select id="earlyHours">
+        <option value="1">1 ชั่วโมง / 1小时</option>
+        <option value="2" selected>2 ชั่วโมง / 2小时</option>
+        <option value="3">3 ชั่วโมง / 3小时</option>
+        <option value="5">5 ชั่วโมง / 5小时</option>
+      </select>
+
+    </label>
+
+    <label>
+      อนุญาตให้ลงเวลาหลังเริ่มกะ / 允许班次开始后打卡：
+
+      <select id="lateHours">
+        <option value="0.5">30 นาที / 0.5小时</option>
+        <option value="1">1 ชั่วโมง / 1小时</option>
+        <option value="2" selected>2 ชั่วโมง / 2小时</option>
+        <option value="3">3 ชั่วโมง / 3小时</option>
+        <option value="5">5 ชั่วโมง / 5小时</option>
+      </select>
+
+    </label>
+
+  </div>
+
+</details>
+
+
+<button
+  id="runBtn"
+  class="btn"
+  disabled>
+  สร้างรายงานตรวจสอบ / 生成核对报告
+</button>
+
+
+<div
+  id="loader"
+  class="loader">
+  กำลังตรวจสอบ โปรดรอสักครู่… / 正在核对，请稍候…
+</div>
+
+
+<div
+  id="globalError"
+  class="error"
+  style="margin-top:12px">
+</div>
+
+
+<div
+  id="result"
+  class="result">
+
+  <b>
+    ตรวจสอบเสร็จแล้ว / 核对完成
+  </b>
+
+  <div class="stats">
+
+    <div class="stat">
+      <span>
+        จำนวนพนักงานตามกะ / 任务人数
+      </span>
+      <b id="totalN">0</b>
+    </div>
+
+    <div class="stat">
+      <span>
+        พบการลงเวลา / 已打卡
+      </span>
+      <b id="okN">0</b>
+    </div>
+
+    <div class="stat bad">
+      <span>
+        FLAG ขาดการลงเวลาเข้าในการเช็กชื่อ / 上班点名缺卡
+      </span>
+      <b id="flagN">0</b>
+    </div>
+
+  </div>
+
+
+  <button
+    id="downloadBtn"
+    class="btn download">
+    ดาวน์โหลดไฟล์ Excel 3 Sheet / 下载 3-Sheet Excel
+  </button>
+
+</div>
+
+</div>
+
+
+<aside class="feedback-shell">
+
+<div class="feedback-title">
+  ข้อเสนอแนะ / 反馈
+</div>
+
+<div class="feedback-help">
+  ความคิดเห็นของคุณช่วยให้เราปรับปรุงได้อย่างต่อเนื่อง
+  <br>
+  您的反馈将帮助我们持续改善。
+</div>
+
+<div style="font-size:11px;font-weight:600;line-height:1.35">
+  เครื่องมือนี้มีประโยชน์หรือไม่?
+  <br>
+  这个工具有帮助吗？
+</div>
+
+<div class="helpful-row">
+
+  <button
+    id="helpfulBtn"
+    type="button"
+    class="helpful-btn">
+    👍 มีประโยชน์ / 有帮助
+  </button>
+
+</div>
+
+<div
+  id="helpfulStatus"
+  class="helpful-status">
+</div>
+
+
+<div class="optional-wrap">
+
+  <label
+    for="feedbackText"
+    class="optional-label">
+    ข้อเสนอแนะเพิ่มเติม (ไม่บังคับ)
+    <br>
+    其他建议（可选）
+  </label>
+
+  <textarea
+    id="feedbackText"
+    placeholder="กรุณากรอก / 请输入">
+  </textarea>
+
+  <button
+    id="feedbackSubmit"
+    type="button"
+    class="feedback-submit">
+    ส่งข้อเสนอแนะ / 提交建议
+  </button>
+
+  <div
+    id="feedbackStatus"
+    class="feedback-status">
+  </div>
+
+</div>
+
+</aside>
+
+</div>
 </div>
 
 
@@ -943,15 +900,6 @@
   }
 
 
-  // Anonymous usage only.
-  // No Excel rows, employee IDs, names,
-  // file names or report contents are sent.
-
-  logEvent(
-    'page_view'
-  );
-
-
   const taskInput =
     $('taskFile');
 
@@ -995,8 +943,7 @@
 
   const aliases = {
 
-    emp: [
-
+    emp:[
       '员工工号',
       '工号',
       '员工编号',
@@ -1021,12 +968,10 @@
       'emp no',
       'staff id',
       'staff no'
-
     ],
 
 
-    taskDate: [
-
+    taskDate:[
       '任务日期',
       '工作日期',
       '作业日期',
@@ -1043,12 +988,10 @@
       'work date',
       'working date',
       'shift date'
-
     ],
 
 
-    shift: [
-
+    shift:[
       '用工时段',
       '任务班次',
       '班次',
@@ -1070,12 +1013,10 @@
       'work shift',
       'working time',
       'work period'
-
     ],
 
 
-    punchTime: [
-
+    punchTime:[
       '打卡时间',
       '考勤时间',
       '刷卡时间',
@@ -1101,19 +1042,16 @@
       'timestamp',
       'date time',
       'datetime'
-
     ],
 
 
-    modifiedBy: [
-
+    modifiedBy:[
       '修改人',
       '更新人',
       'updated by',
       'modified by',
       'ผู้แก้ไข',
       'ผู้ปรับปรุง'
-
     ]
 
   };
@@ -1150,7 +1088,7 @@
       return false;
 
 
-    if(key === 'emp'){
+    if(key==='emp'){
 
       return (
 
@@ -1180,7 +1118,7 @@
 
         ||
 
-        x === '工号'
+        x==='工号'
 
         ||
 
@@ -1195,7 +1133,7 @@
     }
 
 
-    if(key === 'taskDate'){
+    if(key==='taskDate'){
 
       return (
 
@@ -1244,23 +1182,19 @@
     }
 
 
-    if(key === 'shift'){
+    if(key==='shift'){
 
       return (
 
-        x === 'กะ'
+        x==='กะ'
 
         ||
 
-        x.includes(
-          'กะการทำงาน'
-        )
+        x.includes('กะการทำงาน')
 
         ||
 
-        x.includes(
-          'ช่วงกะ'
-        )
+        x.includes('ช่วงกะ')
 
         ||
 
@@ -1297,7 +1231,7 @@
     }
 
 
-    if(key === 'punchTime'){
+    if(key==='punchTime'){
 
       return (
 
@@ -1443,17 +1377,17 @@
             .decode_cell(addr);
 
 
-        if(c.r < minR)
-          minR = c.r;
+        if(c.r<minR)
+          minR=c.r;
 
-        if(c.c < minC)
-          minC = c.c;
+        if(c.c<minC)
+          minC=c.c;
 
-        if(c.r > maxR)
-          maxR = c.r;
+        if(c.r>maxR)
+          maxR=c.r;
 
-        if(c.c > maxC)
-          maxC = c.c;
+        if(c.c>maxC)
+          maxC=c.c;
 
       }
 
@@ -1463,9 +1397,9 @@
 
 
     if(
-      maxR >= 0
+      maxR>=0
       &&
-      maxC >= 0
+      maxC>=0
     ){
 
       ws['!ref'] =
@@ -1594,7 +1528,7 @@
             idx;
 
 
-          if(idx >= 0)
+          if(idx>=0)
             score++;
 
         }
@@ -1740,7 +1674,7 @@
 
     const req =
 
-      kind === 'task'
+      kind==='task'
 
       ?
 
@@ -2145,33 +2079,18 @@
 
   function makeStart(
     base,
-    part,
-    addDay
+    part
   ){
 
-    const d =
-      new Date(
-
-        base.getFullYear(),
-
-        base.getMonth(),
-
-        base.getDate()
-        +
-        addDay,
-
-        part.h,
-
-        part.m,
-
-        0,
-
-        0
-
-      );
-
-
-    return d;
+    return new Date(
+      base.getFullYear(),
+      base.getMonth(),
+      base.getDate(),
+      part.h,
+      part.m,
+      0,
+      0
+    );
 
   }
 
@@ -2220,28 +2139,32 @@
       return null;
 
 
+    /*
+      同一个员工会有多条打卡机进出记录。
+
+      这里只在当前班次的有效上班打卡范围内筛选，
+      然后取时间最早的一条。
+
+      例：
+      班次 08:00
+      默认范围 06:00 - 10:00
+
+      打卡：
+      06:32
+      07:55
+      08:03
+      09:18
+
+      最终匹配 06:32
+    */
+
     return arr.reduce(
-
-      (a,b) =>
-
-      Math.abs(
-        a.dt - start
-      )
-
-      <
-
-      Math.abs(
-        b.dt - start
-      )
-
+      (earliest,current) =>
+      current.dt < earliest.dt
       ?
-
-      a
-
+      current
       :
-
-      b
-
+      earliest
     );
 
   }
@@ -2327,31 +2250,31 @@
         },
         (_,i)=>{
 
-          if(i === status0)
+          if(i===status0)
             return {
               wch:30
             };
 
 
-          if(i === status0+1)
+          if(i===status0+1)
             return {
               wch:24
             };
 
 
-          if(i === status0+2)
+          if(i===status0+2)
             return {
               wch:24
             };
 
 
-          if(i === feedback0)
+          if(i===feedback0)
             return {
-              wch:42
+              wch:46
             };
 
 
-          if(i === remark0)
+          if(i===remark0)
             return {
               wch:28
             };
@@ -2578,6 +2501,7 @@
               color:{
                 rgb:'C00000'
               }
+
             }
 
           };
@@ -2607,6 +2531,7 @@
               color:{
                 rgb:'006100'
               }
+
             }
 
           };
@@ -2727,7 +2652,7 @@
               [];
 
 
-            if(ti.emp < 0){
+            if(ti.emp<0){
 
               runtimeMissing.push(
                 [
@@ -2739,7 +2664,7 @@
             }
 
 
-            if(ti.date < 0){
+            if(ti.date<0){
 
               runtimeMissing.push(
                 [
@@ -2751,7 +2676,7 @@
             }
 
 
-            if(ti.shift < 0){
+            if(ti.shift<0){
 
               runtimeMissing.push(
                 [
@@ -2763,7 +2688,7 @@
             }
 
 
-            if(pi.emp < 0){
+            if(pi.emp<0){
 
               runtimeMissing.push(
                 [
@@ -2775,7 +2700,7 @@
             }
 
 
-            if(pi.time < 0){
+            if(pi.time<0){
 
               runtimeMissing.push(
                 [
@@ -2884,7 +2809,7 @@
 
               arr.sort(
                 (a,b) =>
-                a.dt - b.dt
+                a.dt-b.dt
               );
 
             }
@@ -2892,11 +2817,11 @@
 
             const insertAt =
 
-              ti.mod >= 0
+              ti.mod>=0
 
               ?
 
-              ti.mod + 1
+              ti.mod+1
 
               :
 
@@ -2911,7 +2836,7 @@
 
               'ต่างจากเวลาเริ่มกะ(นาที) / 与班次开始差异(分钟)',
 
-              'รูปภาพยืนยันการลงเวลาเข้างานสำเร็จจากผู้ให้บริการแรงงาน/พนักงาน / 供应商/劳工反馈考勤打卡成功照片',
+              'กรุณาตรวจสอบกับผู้ให้บริการแรงงานว่าพนักงานมาทำงานหรือไม่ และขอรูปภาพยืนยันการลงเวลาสำเร็จเพื่อใช้ประกอบการขอเพิ่มบันทึกเวลาเข้า / 请与供应商核实员工是否来上班并索取考勤打卡成功照片用于补卡',
 
               'หมายเหตุ / 备注'
 
@@ -3002,7 +2927,7 @@
 
 
               let status =
-                'FLAG - ไม่พบการลงเวลาเข้า / 缺卡';
+                'FLAG - ขาดการลงเวลาเข้าในการเช็กชื่อ / 上班点名缺卡';
 
 
               let matched =
@@ -3027,24 +2952,10 @@
                   [];
 
 
-                const startDayOffset =
-
-                  part.h < 12
-
-                  ?
-
-                  1
-
-                  :
-
-                  0;
-
-
                 const start =
                   makeStart(
                     base,
-                    part,
-                    startDayOffset
+                    part
                   );
 
 
@@ -3060,7 +2971,7 @@
                 if(hit){
 
                   status =
-                    'OK - พบการลงเวลา / 已打卡เข้า';
+                    'OK - พบการลงเวลา / 已打卡';
 
 
                   matched =
@@ -3175,7 +3086,7 @@
                   );
 
 
-                if(af === bf){
+                if(af===bf){
 
                   return 0;
 
